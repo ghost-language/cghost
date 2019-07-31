@@ -1,0 +1,18 @@
+#! /usr/bin/env php
+
+<?php
+
+require 'vendor/autoload.php';
+
+use Axiom\Ghost\Ghost;
+use Axiom\Ghost\Console\REPLCommand;
+use Symfony\Component\Console\Application;
+
+$ghost       = new Ghost;
+$command     = new REPLCommand($ghost);
+$application = new Application('Ghost Interactive Shell');
+
+$application->add($command);
+$application->setDefaultCommand($command->getName());
+
+$application->run();

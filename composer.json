@@ -1,0 +1,21 @@
+{
+    "name": "axiom/ghost",
+    "description": "Ghost Programming Language",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shea Lewis (Kai)",
+            "email": "shea.lewis89@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "symfony/console": "^4.3",
+        "symfony/finder": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Axiom\\Ghost\\": "src/"
+        }
+    }
+}
