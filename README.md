@@ -1,0 +1,2 @@
+# ghost
+Ghost Programming Language
