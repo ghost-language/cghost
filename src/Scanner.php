@@ -38,7 +38,7 @@ class Scanner
     public function setSource($source)
     {
         $this->reset();
-        
+
         $this->source = $source;
 
         return $this;
@@ -107,6 +107,39 @@ class Scanner
             case '*':
                 $this->addToken(TOKEN_STAR);
                 break;
+            case '!':
+                $this->addToken($this->match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
+                break;
+            case '=':
+                $this->addToken($this->match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+                break;
+            case '<':
+                $this->addToken($this->match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+                break;
+            case '>':
+                $this->addToken($this->match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+                break;
+            case '/':
+                if ($this->match('/')) {
+                    while ($this->peek() != '\n' and ! $this->isAtEndOfSource()) {
+                        $this->advance();
+                    }
+                } else {
+                    $this->addToken(TOKEN_SLASH);
+                }
+
+                break;
+            case ' ';
+            case '\r':
+            case '\t':
+                // Ignore whitespace
+                break;
+            case '\n':
+                $this->line++;
+                break;
+            case '"':
+                $this->string();
+                break;
             default:
                 //
         }
@@ -135,6 +168,63 @@ class Scanner
     protected function addToken($type, $literal = null)
     {
         $this->tokens[] = new Token($type, $literal, $this->line);
+    }
+
+    /**
+     * Looks at the second character for an expected match.
+     * 
+     * @param  string  $expected
+     * @return boolean
+     */
+    protected function match($expected)
+    {
+        if ($this->isAtEndOfSource()) {
+            return false;
+        }
+
+        if ($this->source[$this->current] !== $expected) {
+            return false;
+        }
+
+        $this->current++;
+        
+        return true;
+    }
+
+    /**
+     * Peek at and return the next character.
+     * 
+     * @return string
+     */
+    protected function peek()
+    {
+        if ($this->isAtEndOfSource()) {
+            return;
+        }
+
+        return $this->source[$this->current];
+    }
+
+    protected function string()
+    {
+        while ($this->peek() != '"' and ! $this->isAtEndOfSource()) {
+            if ($this->peek() == '\n') {
+                $this->line++;
+            }
+            
+            $this->advance();
+        }
+
+        if ($this->isAtEndOfSource()) {
+            // Log error, "Unterminated string"
+            return;
+        }
+
+        $this->advance();
+
+        $value = substr($this->source, $this->start + 1, $this->current - $this->start - 2);
+
+        $this->addToken(TOKEN_STRING, $value);
     }
 
     /**
