@@ -16,6 +16,10 @@
     "autoload": {
         "psr-4": {
             "Axiom\\Ghost\\": "src/"
-        }
+        },
+        "files": [
+            "support/helpers.php",
+            "support/tokens.php"
+        ]
     }
 }

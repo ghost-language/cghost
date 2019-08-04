@@ -4,14 +4,25 @@ namespace Axiom\Ghost;
 
 class Ghost
 {
+    protected $scanner;
+
+    public function __construct()
+    {
+        $this->scanner = new Scanner;
+    }
+
     /**
-     * Execute the passed Ghost code.
+     * Execute the passed source code.
      * 
-     * @param  string  $code
+     * @param  string  $source
      * @return mixed
      */
-    public function execute($code)
+    public function execute($source)
     {
-        return $code;
+        $this->scanner->setSource($source);
+
+        $tokens = $this->scanner->scanTokens();
+
+        return $tokens;
     }
 }

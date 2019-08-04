@@ -45,10 +45,16 @@ class REPLCommand extends Command
 
         $this->listenForConsoleCommands($input, $output, $statement);
 
-        $result = $this->ghost->execute($statement);
+        $result   = $this->ghost->execute($statement);
 
-        $output->writeln('<info>    '.$result.'</info>');
-        $output->writeln('');
+        // Temporary output during development
+        $messages = ['Scanned tokens:'];
+
+        foreach ($result as $token) {
+            $messages[] = "<info>$token</info>";
+        }
+
+        $this->writeOutput($messages, $output);
         
         $this->waitForUserInput($input, $output);
     }
@@ -76,5 +82,20 @@ class REPLCommand extends Command
 
             $this->waitForUserInput($input, $output);
         }
+    }
+
+    protected function writeOutput($messages, $output)
+    {
+        if (! is_array($messages)) {
+            $messages = [$messages];
+        }
+
+        $output->writeln('');
+
+        foreach ($messages as $message) {
+            $output->writeln("    $message");
+        }
+        
+        $output->writeln('');
     }
 }
