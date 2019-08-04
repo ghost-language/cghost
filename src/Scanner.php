@@ -30,6 +30,28 @@ class Scanner
     protected $line = 1;
 
     /**
+     * @var array
+     */
+    protected $keywords = [
+        'and'      => TOKEN_AND,
+        'class'    => TOKEN_CLASS,
+        'else'     => TOKEN_ELSE,
+        'false'    => TOKEN_FALSE,
+        'for'      => TOKEN_FOR,
+        'function' => TOKEN_FUNCTION,
+        'if'       => TOKEN_IF,
+        'null'     => TOKEN_NULL,
+        'or'       => TOKEN_OR,
+        'print'    => TOKEN_PRINT,
+        'return'   => TOKEN_RETURN,
+        'parent'   => TOKEN_PARENT,
+        'this'     => TOKEN_THIS,
+        'true'     => TOKEN_TRUE,
+        'var'      => TOKEN_VAR,
+        'while'    => TOKEN_WHILE,
+    ];
+
+    /**
      * Set the source.
      * 
      * @param  string  $source
@@ -44,6 +66,11 @@ class Scanner
         return $this;
     }
 
+    /**
+     * Scan all tokens in source code.
+     * 
+     * @return array
+     */
     public function scanTokens()
     {
         while (! $this->isAtEndOfSource()) {
@@ -140,8 +167,14 @@ class Scanner
             case '"':
                 $this->string();
                 break;
+            case ($this->isNumeric($character)):
+                $this->number();
+                break;
+            case ($this->isAlpha($character)):
+                $this->identifier();
+                break;
             default:
-                //
+                // Report error
         }
     }
 
@@ -192,7 +225,7 @@ class Scanner
     }
 
     /**
-     * Peek at and return the next character.
+     * Peek at and return the current character.
      * 
      * @return string
      */
@@ -205,13 +238,34 @@ class Scanner
         return $this->source[$this->current];
     }
 
+    /**
+     * Peek at and return the next character.
+     * 
+     * @return string
+     */
+    protected function peekNext()
+    {
+        $next = $this->current + 1;
+        
+        if ($next >= strlen($this->source)) {
+            return;
+        }
+
+        return $this->source[$next];
+    }
+
+    /**
+     * Identify and extract string token type value.
+     * 
+     * @return void
+     */
     protected function string()
     {
         while ($this->peek() != '"' and ! $this->isAtEndOfSource()) {
             if ($this->peek() == '\n') {
                 $this->line++;
             }
-            
+
             $this->advance();
         }
 
@@ -225,6 +279,92 @@ class Scanner
         $value = substr($this->source, $this->start + 1, $this->current - $this->start - 2);
 
         $this->addToken(TOKEN_STRING, $value);
+    }
+
+    /**
+     * Determine if the referenced character is numberic.
+     * (0 - 9)
+     * 
+     * @param  string  $character
+     * @return boolean
+     */
+    protected function isNumeric($character)
+    {
+        $isNumeric = is_numeric($character);
+        
+        return $isNumeric;
+    }
+
+    /**
+     * Determine if the referenced character is alphabetic.
+     * (a - z, A - Z, _)
+     * 
+     * @param  string  $character
+     * @return boolean
+     */
+    protected function isAlpha($character)
+    {
+        return ($character >= 'a' and $character <= 'z') or
+            ($character >= 'A' and $character <= 'Z') or
+            $character == '_';
+    }
+
+    /**
+     * Determine if the referenced character is alphanumeric.
+     * (a - z, A - Z, _, 0 - 9)
+     * 
+     * @param  string  $character
+     * @return boolean
+     */
+    protected function isAlphaNumeric($character)
+    {
+        return $this->isAlpha($character) or $this->isNumeric($character);
+    }
+
+    /**
+     * Identify and extract number token type value.
+     * 
+     * @return void
+     */
+    protected function number()
+    {
+        while ($this->isNumeric($this->peek())) {
+            $this->advance();
+        }
+        
+        if ($this->peek() == '.' and $this->isNumeric($this->peekNext())) {
+            // Consume the "."
+            $this->advance();
+
+            while ($this->isNumeric($this->peek())) {
+                $this->advance();
+            }
+        }
+
+        $value = substr($this->source, $this->start, $this->current - $this->start);
+
+        $this->addToken(TOKEN_NUMBER, $value);
+    }
+
+    /**
+     * Identify and extract identifiers and reserved keywords.
+     * 
+     * @return void
+     */
+    protected function identifier()
+    {
+        while ($this->isAlphaNumeric($this->peek())) {
+            $this->advance();
+        }
+
+        $type = TOKEN_IDENTIFIER;
+        $text = substr($this->source, $this->start, $this->current - $this->start);
+
+        if (isset($this->keywords[$text])) {
+            $type = $this->keywords[$text];
+        }
+
+        $this->addToken($type);
     }
 
     /**
