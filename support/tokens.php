@@ -36,6 +36,7 @@ define('TOKEN_FALSE', 'TOKEN_FALSE');
 define('TOKEN_FUNCTION', 'TOKEN_FUNCTION');
 define('TOKEN_FOR', 'TOKEN_FOR');
 define('TOKEN_IF', 'TOKEN_IF');
+define('TOKEN_LET', 'TOKEN_LET');
 define('TOKEN_NULL', 'TOKEN_NULL');
 define('TOKEN_OR', 'TOKEN_OR');
 define('TOKEN_PRINT', 'TOKEN_PRINT');
@@ -43,7 +44,6 @@ define('TOKEN_RETURN', 'TOKEN_RETURN');
 define('TOKEN_PARENT', 'TOKEN_PARENT');
 define('TOKEN_THIS', 'TOKEN_THIS');
 define('TOKEN_TRUE', 'TOKEN_TRUE');
-define('TOKEN_VAR', 'TOKEN_VAR');
 define('TOKEN_WHILE', 'TOKEN_WHILE');
 
 // Misc

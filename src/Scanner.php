@@ -40,6 +40,7 @@ class Scanner
         'for'      => TOKEN_FOR,
         'function' => TOKEN_FUNCTION,
         'if'       => TOKEN_IF,
+        'let'      => TOKEN_LET,
         'null'     => TOKEN_NULL,
         'or'       => TOKEN_OR,
         'print'    => TOKEN_PRINT,
@@ -47,7 +48,6 @@ class Scanner
         'parent'   => TOKEN_PARENT,
         'this'     => TOKEN_THIS,
         'true'     => TOKEN_TRUE,
-        'var'      => TOKEN_VAR,
         'while'    => TOKEN_WHILE,
     ];
 
