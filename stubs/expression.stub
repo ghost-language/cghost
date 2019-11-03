@@ -2,16 +2,19 @@
 
 namespace Axiom\Ghost\Expressions;
 
+use Axiom\Ghost\Token;
+use Axiom\Ghost\Expressions\Expression;
+
 class {class} extends Expression
 {
     {properties}
 
     /**
-     * Create a new {class} Expression instance.
+     * Create a new {class} expression instance.
      * 
      {docblock}
      */
-    public function __construct({params})
+    public function __construct({parameters})
     {
         {definitions}
     }

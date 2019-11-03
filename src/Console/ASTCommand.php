@@ -20,16 +20,92 @@ class ASTCommand extends Command
         $output->writeln('Ghost Interpreter (PHP) -- Abstract Syntax Tree Generator');
 
         $expressions = [
-            'Binary'   => ['Expression $left', 'Token $operator', 'Expression $right'],
-            'Grouping' => ['Expression $expression'],
-            'Literal'  => ['$value'],
-            'Unary'    => ['Token $operator', 'Expression $right'],
+            'Binary' => [
+                ['Expression', '$left'],
+                ['Token', '$operator'],
+                ['Expression', '$right'],
+            ],
+            'Grouping' => [
+                ['Expression', '$expression'],
+            ],
+            'Literal' => [
+                ['Object', '$value'],
+            ],
+            'Unary' => [
+                ['Token', '$operator'],
+                ['Expression', '$right'],
+            ],
         ];
 
         $stub = file_get_contents('stubs/expression.stub');
 
         foreach ($expressions as $class => $properties) {
-            file_put_contents("src/Expressions/{$class}.php", $stub);
+            $content = $stub;
+
+            $replace = [
+                '{class}'       => $class,
+                '{properties}'  => $this->generateProperties($properties),
+                '{docblock}'    => $this->generateDocBlock($properties),
+                '{parameters}'  => $this->generateParameters($properties),
+                '{definitions}' => $this->generateDefinitions($properties),
+            ];
+
+            foreach ($replace as $find => $replace) {
+                $content = str_replace($find, $replace, $content);
+            }
+
+            file_put_contents("src/Expressions/{$class}.php", $content);
         }
+
+        $output->writeln('<comment>Complete.</comment>');
+    }
+
+    private function generateProperties($properties)
+    {
+        $string = '';
+
+        foreach ($properties as list($type, $variable)) {
+            $string .= "\t/**\n";
+            $string .= "\t * @var {$type}\n";
+            $string .= "\t */\n";
+            $string .= "\tpublic {$variable};\n\n";
+        }
+
+        return trim($string);
+    }
+
+    private function generateDocBlock($properties)
+    {
+        $string = '';
+
+        foreach ($properties as list($type, $variable)) {
+            $string .= "\t * param  {$type}  {$variable}\n";
+        }
+
+        return trim($string);
+    }
+
+    private function generateParameters($properties)
+    {
+        $string = '';
+
+        foreach ($properties as list($type, $variable)) {
+            $string .= "{$type} {$variable}, ";
+        }
+
+        return rtrim(trim($string), ',');
+    }
+
+    private function generateDefinitions($properties)
+    {
+        $string = '';
+
+        foreach ($properties as list($type, $variable)) {
+            $reference = str_replace('$', '', $variable);
+
+            $string .= "\t\t\$this->{$reference} = {$variable};\n";
+        }
+
+        return trim($string);
     }
 }
