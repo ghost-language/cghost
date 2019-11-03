@@ -21,5 +21,8 @@
             "support/helpers.php",
             "support/tokens.php"
         ]
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.3"
     }
 }

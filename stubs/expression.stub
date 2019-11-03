@@ -1,0 +1,18 @@
+<?php
+
+namespace Axiom\Ghost\Expressions;
+
+class {class} extends Expression
+{
+    {properties}
+
+    /**
+     * Create a new {class} Expression instance.
+     * 
+     {docblock}
+     */
+    public function __construct({params})
+    {
+        {definitions}
+    }
+}
