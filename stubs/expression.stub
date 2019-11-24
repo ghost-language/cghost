@@ -18,4 +18,6 @@ class {class} extends Expression
     {
         {definitions}
     }
+
+    {accept}
 }

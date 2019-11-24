@@ -21,4 +21,15 @@ class Grouping extends Expression
     {
         $this->expression = $expression;
     }
+
+    /**
+	 * Accept a visitor instance.
+	 *
+	 * @param  Visitor  $visitor
+	 * @return Visitor
+	*/
+	public function accept($visitor)
+	{
+		return $visitor->visitGrouping($this);
+	}
 }

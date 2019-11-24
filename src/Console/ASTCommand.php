@@ -48,6 +48,7 @@ class ASTCommand extends Command
                 '{docblock}'    => $this->generateDocBlock($properties),
                 '{parameters}'  => $this->generateParameters($properties),
                 '{definitions}' => $this->generateDefinitions($properties),
+                '{accept}'      => $this->generateAcceptFunction($class),
             ];
 
             foreach ($replace as $find => $replace) {
@@ -105,6 +106,24 @@ class ASTCommand extends Command
 
             $string .= "\t\t\$this->{$reference} = {$variable};\n";
         }
+
+        return trim($string);
+    }
+
+    private function generateAcceptFunction($class)
+    {
+        $string = '';
+
+        $string .= "\t/**\n";
+        $string .= "\t * Accept a visitor instance.\n";
+        $string .= "\t *\n";
+        $string .= "\t * @param  Visitor  \$visitor\n";
+        $string .= "\t * @return Visitor\n";
+        $string .= "\t*/\n";
+        $string .= "\tpublic function accept(\$visitor)\n";
+        $string .= "\t{\n";
+        $string .= "\t\treturn \$visitor->visit{$class}(\$this);\n";
+        $string .= "\t}";
 
         return trim($string);
     }

@@ -21,4 +21,15 @@ class Literal extends Expression
     {
         $this->value = $value;
     }
+
+    /**
+	 * Accept a visitor instance.
+	 *
+	 * @param  Visitor  $visitor
+	 * @return Visitor
+	*/
+	public function accept($visitor)
+	{
+		return $visitor->visitLiteral($this);
+	}
 }
