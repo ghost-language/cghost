@@ -6,6 +6,7 @@ use ParseError;
 use Axiom\Ghost\Expressions\Unary;
 use Axiom\Ghost\Expressions\Binary;
 use Axiom\Ghost\Expressions\Literal;
+use Axiom\Ghost\Expressions\Grouping;
 
 class Parser
 {
@@ -137,7 +138,7 @@ class Parser
 
     protected function consume($tokenType, $message)
     {
-        if (! $this->check($tokenType)) {
+        if ($this->check($tokenType)) {
             return $this->advance();
         }
 
