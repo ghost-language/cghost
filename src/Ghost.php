@@ -21,8 +21,14 @@ class Ghost
     {
         $this->scanner->setSource($source);
 
-        $tokens = $this->scanner->scanTokens();
+        $tokens     = $this->scanner->scanTokens();
+        $parser     = new Parser($tokens);
+        $expression = $parser->parse();
 
-        return $tokens;
+        if (SyntaxError::$hadError) {
+            return;
+        }
+
+        return $expression;
     }
 }

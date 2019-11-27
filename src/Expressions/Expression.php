@@ -2,7 +2,7 @@
 
 namespace Axiom\Ghost\Expressions;
 
-class Expression
+abstract class Expression
 {
     /**
      * @var

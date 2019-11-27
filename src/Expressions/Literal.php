@@ -17,7 +17,7 @@ class Literal extends Expression
      * 
      * param  Object  $value
      */
-    public function __construct(Object $value)
+    public function __construct($value)
     {
         $this->value = $value;
     }

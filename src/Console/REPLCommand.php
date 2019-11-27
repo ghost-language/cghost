@@ -47,6 +47,8 @@ class REPLCommand extends Command
 
         $result   = $this->ghost->execute($statement);
 
+        dd($result);
+
         // Temporary output during development
         $messages = ['Scanned tokens:'];
 
