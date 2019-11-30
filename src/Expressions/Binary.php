@@ -44,6 +44,6 @@ class Binary extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitBinary($this);
+		return $visitor->visitBinaryExpression($this);
 	}
 }

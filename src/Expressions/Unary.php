@@ -37,6 +37,6 @@ class Unary extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitUnary($this);
+		return $visitor->visitUnaryExpression($this);
 	}
 }

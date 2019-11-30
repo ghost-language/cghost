@@ -5,10 +5,12 @@ namespace Axiom\Ghost;
 class Ghost
 {
     protected $scanner;
+    protected $interpreter;
 
     public function __construct()
     {
-        $this->scanner = new Scanner;
+        $this->scanner     = new Scanner;
+        $this->interpreter = new Interpreter;
     }
 
     /**
@@ -29,6 +31,6 @@ class Ghost
             return;
         }
 
-        return $expression;
+        $this->interpreter->interpret($expression);
     }
 }

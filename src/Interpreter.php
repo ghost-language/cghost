@@ -2,19 +2,23 @@
 
 namespace Axiom\Ghost;
 
+use Axiom\Ghost\Token;
 use Axiom\Ghost\Expressions\Unary;
 use Axiom\Ghost\Expressions\Binary;
 use Axiom\Ghost\Expressions\Literal;
 use Axiom\Ghost\Expressions\Grouping;
+use Axiom\Ghost\Exceptions\RuntimeError;
 use Axiom\Ghost\Contracts\VisitsStatements;
 use Axiom\Ghost\Contracts\VisitsExpressions;
 
-class Interpretor implements VisitsExpressions, VisitsStatements
+class Interpreter implements VisitsExpressions, VisitsStatements
 {
     public function interpret($expression)
     {
         try {
+            $value = $this->evaluate($expression);
 
+            print $this->stringify($value)."\n";
         } catch (RuntimeError $error) {
             // Catch error
         }
@@ -72,14 +76,24 @@ class Interpretor implements VisitsExpressions, VisitsStatements
 
         switch ($expression->operator->type) {
             case TOKEN_GREATER:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) > doubleval($right);
             case TOKEN_GREATER_EQUAL:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) >= doubleval($right);
             case TOKEN_LESS:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) < doubleval($right);
             case TOKEN_LESS_EQUAL:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) <= doubleval($right);
             case TOKEN_MINUS:
+                $this->checkNumberOperand($expression->operator, $right);
+
                 return doubleval($left) - doubleval($right);
             case TOKEN_PLUS:
                 if (is_double($left) and is_double($right)) {
@@ -89,9 +103,15 @@ class Interpretor implements VisitsExpressions, VisitsStatements
                 if (is_string($left) and is_string($right)) {
                     return $left.''.$right;
                 }
+
+                throw new RuntimeError($expression->operator, "Operands must be two numbers or two strings.");
             case TOKEN_SLASH:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) / doubleval($right);
             case TOKEN_STAR:
+                $this->checkNumberOperands($expression->operator, $left, $right);
+
                 return doubleval($left) * doubleval($right);
             case TOKEN_BANG_EQUAL:
                 return ! $this->isEqual($left, $right);
@@ -112,6 +132,41 @@ class Interpretor implements VisitsExpressions, VisitsStatements
     protected function evaluate($expression)
     {
         return $expression->accept($this);
+    }
+
+    /**
+     * Checks the given number operand is a valid double value.
+     *
+     * @param  Token  $operator
+     * @param  mixed  $operand
+     * @return
+     * @throws \Axiom\Ghost\Exceptions\RuntimeError
+     */
+    protected function checkNumberOperand(Token $operator, $operand)
+    {
+        if (is_double($operand)) {
+            return;
+        }
+
+        throw new RuntimeError("Operand must be a number.");
+    }
+
+        /**
+     * Checks the given left and right operands are valid double values.
+     *
+     * @param  Token  $operator
+     * @param  mixed  $left
+     * @param  mixed  $right
+     * @return
+     * @throws \Axiom\Ghost\Exceptions\RuntimeError
+     */
+    protected function checkNumberOperands($operator, $left, $right)
+    {
+        if (is_double($left) and is_double($right)) {
+            return;
+        }
+
+        throw new RuntimeError("Operands must be numbers.");
     }
 
     /**
@@ -152,5 +207,14 @@ class Interpretor implements VisitsExpressions, VisitsStatements
         }
 
         return $left == $right;
+    }
+
+    protected function stringify($object)
+    {
+        if (is_null($object)) {
+            return 'null';
+        }
+
+        return (string) $object;
     }
 }

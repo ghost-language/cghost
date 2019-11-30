@@ -30,6 +30,6 @@ class Grouping extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitGrouping($this);
+		return $visitor->visitGroupingExpression($this);
 	}
 }

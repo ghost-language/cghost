@@ -30,6 +30,6 @@ class Literal extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitLiteral($this);
+		return $visitor->visitLiteralExpression($this);
 	}
 }
