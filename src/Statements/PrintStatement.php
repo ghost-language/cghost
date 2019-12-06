@@ -1,11 +1,11 @@
 <?php
 
-namespace Axiom\Ghost\Expressions;
+namespace Axiom\Ghost\Statements;
 
 use Axiom\Ghost\Token;
-use Axiom\Ghost\Expressions\Expression;
+use Axiom\Ghost\Statements\Statement;
 
-class Grouping extends Expression
+class PrintStatement extends Statement
 {
     /**
 	 * @var Expression
@@ -13,7 +13,7 @@ class Grouping extends Expression
 	public $expression;
 
     /**
-     * Create a new Grouping expression instance.
+     * Create a new Print statement instance.
      * 
      * param  Expression  $expression
      */
@@ -30,6 +30,6 @@ class Grouping extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitGroupingExpression($this);
+		return $visitor->visitPrintStatement($this);
 	}
 }

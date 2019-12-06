@@ -1,16 +1,16 @@
 <?php
 
-namespace Axiom\Ghost\Expressions;
+namespace Axiom\Ghost\Statements;
 
 use Axiom\Ghost\Token;
-use Axiom\Ghost\Expressions\Expression;
+use Axiom\Ghost\Statements\Statement;
 
-class {class}Expression extends Expression
+class {class}Statement extends Statement
 {
     {properties}
 
     /**
-     * Create a new {class} expression instance.
+     * Create a new {class} statement instance.
      * 
      {docblock}
      */

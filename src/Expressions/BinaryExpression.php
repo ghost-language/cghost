@@ -5,9 +5,14 @@ namespace Axiom\Ghost\Expressions;
 use Axiom\Ghost\Token;
 use Axiom\Ghost\Expressions\Expression;
 
-class Unary extends Expression
+class BinaryExpression extends Expression
 {
     /**
+	 * @var Expression
+	 */
+	public $left;
+
+	/**
 	 * @var Token
 	 */
 	public $operator;
@@ -18,14 +23,16 @@ class Unary extends Expression
 	public $right;
 
     /**
-     * Create a new Unary expression instance.
+     * Create a new Binary expression instance.
      * 
-     * param  Token  $operator
+     * param  Expression  $left
+	 * param  Token  $operator
 	 * param  Expression  $right
      */
-    public function __construct(Token $operator, Expression $right)
+    public function __construct(Expression $left, Token $operator, Expression $right)
     {
-        $this->operator = $operator;
+        $this->left = $left;
+		$this->operator = $operator;
 		$this->right = $right;
     }
 
@@ -37,6 +44,6 @@ class Unary extends Expression
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitUnaryExpression($this);
+		return $visitor->visitBinaryExpression($this);
 	}
 }

@@ -4,5 +4,5 @@ namespace Axiom\Ghost\Contracts;
 
 interface VisitsStatements
 {
-    // public function visitBlockStatemt(Block $statement);
+    // public function visitPrintStatement(PrintStatement $statement);
 }

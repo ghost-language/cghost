@@ -3,13 +3,13 @@
 namespace Axiom\Ghost;
 
 use Axiom\Ghost\Token;
-use Axiom\Ghost\Expressions\Unary;
-use Axiom\Ghost\Expressions\Binary;
-use Axiom\Ghost\Expressions\Literal;
-use Axiom\Ghost\Expressions\Grouping;
 use Axiom\Ghost\Exceptions\RuntimeError;
 use Axiom\Ghost\Contracts\VisitsStatements;
 use Axiom\Ghost\Contracts\VisitsExpressions;
+use Axiom\Ghost\Expressions\UnaryExpression;
+use Axiom\Ghost\Expressions\BinaryExpression;
+use Axiom\Ghost\Expressions\LiteralExpression;
+use Axiom\Ghost\Expressions\GroupingExpression;
 
 class Interpreter implements VisitsExpressions, VisitsStatements
 {
@@ -27,9 +27,9 @@ class Interpreter implements VisitsExpressions, VisitsStatements
     /**
      * Evaluate literal expressions.
      * 
-     * @param  Literal  $expression
+     * @param  LiteralExpression  $expression
      */
-    public function visitLiteralExpression(Literal $expression)
+    public function visitLiteralExpression(LiteralExpression $expression)
     {
         return $expression->value;
     }
@@ -37,9 +37,9 @@ class Interpreter implements VisitsExpressions, VisitsStatements
     /**
      * Evaluate grouping expressions.
      * 
-     * @param  Grouping  $expression
+     * @param  GroupingExpression  $expression
      */
-    public function visitGroupingExpression(Grouping $expression)
+    public function visitGroupingExpression(GroupingExpression $expression)
     {
         return $this->evaluate($expression->expression);
     }
@@ -47,9 +47,9 @@ class Interpreter implements VisitsExpressions, VisitsStatements
     /**
      * Evaluate unary expressions.
      * 
-     * @param  Unary  $expression
+     * @param  UnaryExpression  $expression
      */
-    public function visitUnaryExpression(Unary $expression)
+    public function visitUnaryExpression(UnaryExpression $expression)
     {
         $right = $this->evaluate($expression->right);
 
@@ -67,9 +67,9 @@ class Interpreter implements VisitsExpressions, VisitsStatements
     /**
      * Evaluate binary expressions.
      * 
-     * @param  Binary  $expression
+     * @param  BinaryExpression  $expression
      */
-    public function visitBinaryExpression(Binary $expression)
+    public function visitBinaryExpression(BinaryExpression $expression)
     {
         $left  = $this->evaluate($expression->left);
         $right = $this->evaluate($expression->right);
@@ -148,7 +148,7 @@ class Interpreter implements VisitsExpressions, VisitsStatements
             return;
         }
 
-        throw new RuntimeError("Operand must be a number.");
+        throw new RuntimeError($operator, "Operand must be a number.");
     }
 
         /**
@@ -166,7 +166,7 @@ class Interpreter implements VisitsExpressions, VisitsStatements
             return;
         }
 
-        throw new RuntimeError("Operands must be numbers.");
+        throw new RuntimeError($operator, "Operands must be numbers.");
     }
 
     /**

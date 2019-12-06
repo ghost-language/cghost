@@ -37,9 +37,23 @@ class ASTCommand extends Command
             ],
         ];
 
-        $stub = file_get_contents('stubs/expression.stub');
+        $statements = [
+            'Print' => [
+                ['Expression', '$expression'],
+            ],
+        ];
 
-        foreach ($expressions as $class => $properties) {
+        $this->generate($expressions, 'expression.stub', 'Expressions', 'Expression');
+        $this->generate($statements, 'statement.stub', 'Statements', 'Statement');
+
+        $output->writeln('<comment>Complete.</comment>');
+    }
+
+    private function generate($ast, $stub, $directory, $affix)
+    {
+        $stub = file_get_contents("stubs/{$stub}");
+
+        foreach ($ast as $class => $properties) {
             $content = $stub;
 
             $replace = [
@@ -48,17 +62,15 @@ class ASTCommand extends Command
                 '{docblock}'    => $this->generateDocBlock($properties),
                 '{parameters}'  => $this->generateParameters($properties),
                 '{definitions}' => $this->generateDefinitions($properties),
-                '{accept}'      => $this->generateAcceptFunction($class),
+                '{accept}'      => $this->generateAcceptFunction($class, $affix),
             ];
 
             foreach ($replace as $find => $replace) {
                 $content = str_replace($find, $replace, $content);
             }
 
-            file_put_contents("src/Expressions/{$class}.php", $content);
+            file_put_contents("src/{$directory}/{$class}{$affix}.php", $content);
         }
-
-        $output->writeln('<comment>Complete.</comment>');
     }
 
     private function generateProperties($properties)
@@ -110,7 +122,7 @@ class ASTCommand extends Command
         return trim($string);
     }
 
-    private function generateAcceptFunction($class)
+    private function generateAcceptFunction($class, $affix)
     {
         $string = '';
 
@@ -122,7 +134,7 @@ class ASTCommand extends Command
         $string .= "\t*/\n";
         $string .= "\tpublic function accept(\$visitor)\n";
         $string .= "\t{\n";
-        $string .= "\t\treturn \$visitor->visit{$class}(\$this);\n";
+        $string .= "\t\treturn \$visitor->visit{$class}{$affix}(\$this);\n";
         $string .= "\t}";
 
         return trim($string);

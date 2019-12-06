@@ -47,16 +47,16 @@ class REPLCommand extends Command
 
         $result   = $this->ghost->execute($statement);
 
-        dd($result);
+        // dd($result);
 
         // Temporary output during development
-        $messages = ['Scanned tokens:'];
+        // $messages = ['Scanned tokens:'];
 
-        foreach ($result as $token) {
-            $messages[] = "<info>$token</info>";
-        }
+        // foreach ($result as $token) {
+        //     $messages[] = "<info>$token</info>";
+        // }
 
-        $this->writeOutput($messages, $output);
+        // $this->writeOutput($messages, $output);
         
         $this->waitForUserInput($input, $output);
     }

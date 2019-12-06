@@ -5,7 +5,7 @@ namespace Axiom\Ghost\Expressions;
 use Axiom\Ghost\Token;
 use Axiom\Ghost\Expressions\Expression;
 
-class Literal extends Expression
+class LiteralExpression extends Expression
 {
     /**
 	 * @var Object
@@ -19,6 +19,7 @@ class Literal extends Expression
      */
     public function __construct($value)
     {
+		dd($value);
         $this->value = $value;
     }
 

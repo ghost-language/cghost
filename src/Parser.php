@@ -3,10 +3,10 @@
 namespace Axiom\Ghost;
 
 use ParseError;
-use Axiom\Ghost\Expressions\Unary;
-use Axiom\Ghost\Expressions\Binary;
-use Axiom\Ghost\Expressions\Literal;
-use Axiom\Ghost\Expressions\Grouping;
+use Axiom\Ghost\Expressions\UnaryExpression;
+use Axiom\Ghost\Expressions\BinaryExpression;
+use Axiom\Ghost\Expressions\LiteralExpression;
+use Axiom\Ghost\Expressions\GroupingExpression;
 
 class Parser
 {
@@ -51,7 +51,7 @@ class Parser
         while ($this->match(TOKEN_BANG_EQUAL, TOKEN_EQUAL_EQUAL)) {
             $operator   = $this->previous();
             $right      = $this->comparison();
-            $expression = new Binary($expression, $operator, $right);
+            $expression = new BinaryExpression($expression, $operator, $right);
         }
 
         return $expression;
@@ -64,7 +64,7 @@ class Parser
         while ($this->match(TOKEN_GREATER, TOKEN_GREATER_EQUAL, TOKEN_LESS, TOKEN_LESS_EQUAL)) {
             $operator   = $this->previous();
             $right      = $this->addition();
-            $expression = new Binary($expression, $operator, $right);
+            $expression = new BinaryExpression($expression, $operator, $right);
         }
 
         return $expression;
@@ -77,7 +77,7 @@ class Parser
         while ($this->match(TOKEN_MINUS, TOKEN_PLUS)) {
             $operator   = $this->previous();
             $right      = $this->multiplication();
-            $expression = new Binary($expression, $operator, $right);
+            $expression = new BinaryExpression($expression, $operator, $right);
         }
 
         return $expression;
@@ -90,7 +90,7 @@ class Parser
         while ($this->match(TOKEN_SLASH, TOKEN_STAR)) {
             $operator   = $this->previous();
             $right      = $this->unary();
-            $expression = new Binary($expression, $operator, $right);
+            $expression = new BinaryExpression($expression, $operator, $right);
         }
 
         return $expression;
@@ -101,7 +101,7 @@ class Parser
         if ($this->match(TOKEN_BANG, TOKEN_MINUS)) {
             $operator   = $this->previous();
             $right      = $this->unary();
-            $expression = new Unary($operator, $right);
+            $expression = new UnaryExpression($operator, $right);
         }
 
         return $this->primary();
@@ -110,19 +110,19 @@ class Parser
     protected function primary()
     {
         if ($this->match(TOKEN_FALSE)) {
-            return new Literal(false);
+            return new LiteralExpression(false);
         }
 
         if ($this->match(TOKEN_TRUE)) {
-            return new Literal(true);
+            return new LiteralExpression(true);
         }
 
         if ($this->match(TOKEN_NULL)) {
-            return new Literal(null);
+            return new LiteralExpression(null);
         }
 
         if ($this->match(TOKEN_NUMBER, TOKEN_STRING)) {
-            return new Literal($this->previous()->literal);
+            return new LiteralExpression($this->previous()->literal);
         }
 
         if ($this->match(TOKEN_LEFT_PARENTHESIS)) {
@@ -130,7 +130,7 @@ class Parser
             
             $this->consume(TOKEN_RIGHT_PARENTHESIS, "Expect ')' after expression.");
 
-            return new Grouping($expression);
+            return new GroupingExpression($expression);
         }
 
         throw $this->error($this->peek(), 'Expect expression.');

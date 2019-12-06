@@ -2,16 +2,15 @@
 
 namespace Axiom\Ghost\Contracts;
 
-use Axiom\Ghost\Expressions\Unary;
-use Axiom\Ghost\Expressions\Binary;
-use Axiom\Ghost\Expressions\Literal;
-use Axiom\Ghost\Expressions\Grouping;
-
+use Axiom\Ghost\Expressions\UnaryExpression;
+use Axiom\Ghost\Expressions\BinaryExpression;
+use Axiom\Ghost\Expressions\LiteralExpression;
+use Axiom\Ghost\Expressions\GroupingExpression;
 
 interface VisitsExpressions
 {
-    public function visitBinaryExpression(Binary $expression);
-    public function visitGroupingExpression(Grouping $expression);
-    public function visitLiteralExpression(Literal $expression);
-    public function visitUnaryExpression(Unary $expression);
+    public function visitBinaryExpression(BinaryExpression $expression);
+    public function visitGroupingExpression(GroupingExpression $expression);
+    public function visitLiteralExpression(LiteralExpression $expression);
+    public function visitUnaryExpression(UnaryExpression $expression);
 }

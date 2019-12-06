@@ -12,7 +12,7 @@ class RuntimeError extends Exception
      */
     public $token;
 
-    public function __construct(Token $token, $message)
+    public function __construct($token, $message)
     {
         parent::__construct($message);
 
