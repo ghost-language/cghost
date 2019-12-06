@@ -5,7 +5,7 @@ namespace Axiom\Ghost\Statements;
 use Axiom\Ghost\Token;
 use Axiom\Ghost\Statements\Statement;
 
-class PrintStatement extends Statement
+class ExpressionStatement extends Statement
 {
     /**
 	 * @var Expression
@@ -13,7 +13,7 @@ class PrintStatement extends Statement
 	public $expression;
 
     /**
-     * Create a new Print statement instance.
+     * Create a new Expression statement instance.
      * 
      * param  Expression  $expression
      */
@@ -30,6 +30,6 @@ class PrintStatement extends Statement
 	*/
 	public function accept($visitor)
 	{
-		return $visitor->visitPrintStatement($this);
+		return $visitor->visitExpressionStatement($this);
 	}
 }

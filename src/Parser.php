@@ -3,10 +3,12 @@
 namespace Axiom\Ghost;
 
 use ParseError;
+use Axiom\Ghost\Statements\PrintStatement;
 use Axiom\Ghost\Expressions\UnaryExpression;
 use Axiom\Ghost\Expressions\BinaryExpression;
 use Axiom\Ghost\Expressions\LiteralExpression;
 use Axiom\Ghost\Expressions\GroupingExpression;
+use Axiom\Ghost\Statements\ExpressionStatement;
 
 class Parser
 {
@@ -32,11 +34,22 @@ class Parser
 
     public function parse()
     {
-        try {
-            return $this->expression();
-        } catch (ParseError $error) {
-            return null;
+        $statements = [];
+
+        while (! $this->isAtEnd()) {
+            $statements[] = $this->statement();
         }
+
+        return $statements;
+    }
+
+    protected function statement()
+    {
+        if ($this->match(TOKEN_PRINT)) {
+            return $this->printStatement();
+        }
+
+        return $this->expressionStatement();
     }
 
     protected function expression()
@@ -221,5 +234,23 @@ class Parser
         SyntaxError::error($token, $message);
 
         return new ParseError;
+    }
+
+    protected function printStatement()
+    {
+        $value = $this->expression();
+
+        $this->consume(TOKEN_SEMICOLON, 'Except ";" after value.');
+
+        return new PrintStatement($value);
+    }
+
+    protected function expressionStatement()
+    {
+        $expression = $this->expression();
+
+        $this->consume(TOKEN_SEMICOLON, 'Except ";" after expression.');
+
+        return new ExpressionStatement($expression);
     }
 }

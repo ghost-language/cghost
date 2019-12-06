@@ -19,7 +19,6 @@ class LiteralExpression extends Expression
      */
     public function __construct($value)
     {
-		dd($value);
         $this->value = $value;
     }
 

@@ -38,6 +38,9 @@ class ASTCommand extends Command
         ];
 
         $statements = [
+            'Expression' => [
+                ['Expression', '$expression'],
+            ],
             'Print' => [
                 ['Expression', '$expression'],
             ],

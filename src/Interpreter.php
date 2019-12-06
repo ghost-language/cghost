@@ -4,21 +4,23 @@ namespace Axiom\Ghost;
 
 use Axiom\Ghost\Token;
 use Axiom\Ghost\Exceptions\RuntimeError;
+use Axiom\Ghost\Statements\PrintStatement;
 use Axiom\Ghost\Contracts\VisitsStatements;
 use Axiom\Ghost\Contracts\VisitsExpressions;
 use Axiom\Ghost\Expressions\UnaryExpression;
 use Axiom\Ghost\Expressions\BinaryExpression;
 use Axiom\Ghost\Expressions\LiteralExpression;
 use Axiom\Ghost\Expressions\GroupingExpression;
+use Axiom\Ghost\Statements\ExpressionStatement;
 
 class Interpreter implements VisitsExpressions, VisitsStatements
 {
-    public function interpret($expression)
+    public function interpret(array $statements)
     {
         try {
-            $value = $this->evaluate($expression);
-
-            print $this->stringify($value)."\n";
+            foreach ($statements as $statement) {
+                $this->execute($statement);
+            }
         } catch (RuntimeError $error) {
             // Catch error
         }
@@ -123,6 +125,20 @@ class Interpreter implements VisitsExpressions, VisitsStatements
         return null;
     }
 
+    public function visitPrintStatement(PrintStatement $statement)
+    {
+        $value = $this->evaluate($statement);
+        print($this->stringify($value)."\n");
+        return null;
+    }
+
+    public function visitExpressionStatement(ExpressionStatement $statement)
+    {
+        $this->evaluate($statement);
+        
+        return null;
+    }
+
     /**
      * Send the expression back into the interpreter's
      * visitor implementation.
@@ -216,5 +232,10 @@ class Interpreter implements VisitsExpressions, VisitsStatements
         }
 
         return (string) $object;
+    }
+
+    protected function execute($statement)
+    {
+        $statement->accept($this);
     }
 }

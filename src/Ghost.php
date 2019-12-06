@@ -25,12 +25,12 @@ class Ghost
 
         $tokens     = $this->scanner->scanTokens();
         $parser     = new Parser($tokens);
-        $expression = $parser->parse();
+        $statements = $parser->parse();
 
         if (SyntaxError::$hadError) {
             return;
         }
 
-        $this->interpreter->interpret($expression);
+        $this->interpreter->interpret($statements);
     }
 }
