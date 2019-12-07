@@ -38,25 +38,14 @@ class REPLCommand extends Command
 
     protected function waitForUserInput(InputInterface $input, OutputInterface $output)
     {
-        $helper = $this->getHelper('question');
+        $helper   = $this->getHelper('question');
         $question = new Question('<info>>>> </info>');
 
         $statement = $helper->ask($input, $output, $question);
 
         $this->listenForConsoleCommands($input, $output, $statement);
 
-        $result   = $this->ghost->execute($statement);
-
-        // dd($result);
-
-        // Temporary output during development
-        // $messages = ['Scanned tokens:'];
-
-        // foreach ($result as $token) {
-        //     $messages[] = "<info>$token</info>";
-        // }
-
-        // $this->writeOutput($messages, $output);
+        $this->ghost->execute($statement);
         
         $this->waitForUserInput($input, $output);
     }

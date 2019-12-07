@@ -27,6 +27,8 @@ class Ghost
         $parser     = new Parser($tokens);
         $statements = $parser->parse();
 
+        // dd($parser, $statements);
+
         if (SyntaxError::$hadError) {
             return;
         }

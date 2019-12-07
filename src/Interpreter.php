@@ -3,6 +3,7 @@
 namespace Axiom\Ghost;
 
 use Axiom\Ghost\Token;
+use Axiom\Ghost\Expressions\Expression;
 use Axiom\Ghost\Exceptions\RuntimeError;
 use Axiom\Ghost\Statements\PrintStatement;
 use Axiom\Ghost\Contracts\VisitsStatements;
@@ -78,15 +79,15 @@ class Interpreter implements VisitsExpressions, VisitsStatements
 
         switch ($expression->operator->type) {
             case TOKEN_GREATER:
-                $this->checkNumberOperands($expression->operator, $left, $right);
+                // $this->checkNumberOperands($expression->operator, $left, $right);
 
                 return doubleval($left) > doubleval($right);
             case TOKEN_GREATER_EQUAL:
-                $this->checkNumberOperands($expression->operator, $left, $right);
+                // $this->checkNumberOperands($expression->operator, $left, $right);
 
                 return doubleval($left) >= doubleval($right);
             case TOKEN_LESS:
-                $this->checkNumberOperands($expression->operator, $left, $right);
+                // $this->checkNumberOperands($expression->operator, $left, $right);
 
                 return doubleval($left) < doubleval($right);
             case TOKEN_LESS_EQUAL:
@@ -94,25 +95,25 @@ class Interpreter implements VisitsExpressions, VisitsStatements
 
                 return doubleval($left) <= doubleval($right);
             case TOKEN_MINUS:
-                $this->checkNumberOperand($expression->operator, $right);
+                // $this->checkNumberOperand($expression->operator, $right);
 
                 return doubleval($left) - doubleval($right);
             case TOKEN_PLUS:
-                if (is_double($left) and is_double($right)) {
+                // if (is_double($left) and is_double($right)) {
                     return doubleval($left) + doubleval($right);
-                }
+                // }
 
-                if (is_string($left) and is_string($right)) {
-                    return $left.''.$right;
-                }
+                // if (is_string($left) and is_string($right)) {
+                //     return $left.''.$right;
+                // }
 
                 throw new RuntimeError($expression->operator, "Operands must be two numbers or two strings.");
             case TOKEN_SLASH:
-                $this->checkNumberOperands($expression->operator, $left, $right);
+                // $this->checkNumberOperands($expression->operator, $left, $right);
 
                 return doubleval($left) / doubleval($right);
             case TOKEN_STAR:
-                $this->checkNumberOperands($expression->operator, $left, $right);
+                // $this->checkNumberOperands($expression->operator, $left, $right);
 
                 return doubleval($left) * doubleval($right);
             case TOKEN_BANG_EQUAL:
@@ -127,14 +128,16 @@ class Interpreter implements VisitsExpressions, VisitsStatements
 
     public function visitPrintStatement(PrintStatement $statement)
     {
-        $value = $this->evaluate($statement);
+        $value = $this->evaluate($statement->expression);
+
         print($this->stringify($value)."\n");
+
         return null;
     }
 
     public function visitExpressionStatement(ExpressionStatement $statement)
     {
-        $this->evaluate($statement);
+        $this->evaluate($statement->expression);
         
         return null;
     }
@@ -145,7 +148,7 @@ class Interpreter implements VisitsExpressions, VisitsStatements
      * 
      * @param  Expression  $expression
      */
-    protected function evaluate($expression)
+    protected function evaluate(Expression $expression)
     {
         return $expression->accept($this);
     }
@@ -167,7 +170,7 @@ class Interpreter implements VisitsExpressions, VisitsStatements
         throw new RuntimeError($operator, "Operand must be a number.");
     }
 
-        /**
+    /**
      * Checks the given left and right operands are valid double values.
      *
      * @param  Token  $operator
@@ -229,6 +232,14 @@ class Interpreter implements VisitsExpressions, VisitsStatements
     {
         if (is_null($object)) {
             return 'null';
+        }
+
+        if ($object === true) {
+            return 'true';
+        }
+
+        if ($object === false) {
+            return 'false';
         }
 
         return (string) $object;
