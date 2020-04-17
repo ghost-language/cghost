@@ -11,13 +11,11 @@ static void resetStack() {
 }
 
 void initVM() {
-    printf("Initializing VM...\n");
-
     resetStack();
 }
 
 void freeVM() {
-    printf("Freeing VM...\n");
+    //
 }
 
 void push(Value value) {

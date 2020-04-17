@@ -10,8 +10,11 @@
 static void repl() {
     char line[1024];
 
+    puts("Ghost (dev-master)");
+    puts("Press Ctrl + C to exit\n");
+
     for (;;) {
-        printf("> ");
+        fputs(">>> ", stdout);
 
         if (!fgets(line, sizeof(line), stdin)) {
             printf("\n");
