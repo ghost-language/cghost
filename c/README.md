@@ -1,1 +1,0 @@
-# C Ghost Bytecode Virtual Machine
