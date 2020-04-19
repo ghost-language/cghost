@@ -1,8 +1,6 @@
 #ifndef ghost_value_h
 #define ghost_value_h
 
-#include "common.h"
-
 // This defines the built-in types and their core representations in memory.
 // Since Ghost is dynamically typed, any variable can hold a value of any type,
 // and the type can change at runtime. Implementing this efficiently is
@@ -19,6 +17,8 @@
 // pointer to it. Copying the Value copies a reference to the same object. The
 // Ghost implementation calls these "Obj", or objects, though to a user, all
 // values are objects.
+
+#include "common.h"
 
 typedef struct sObj Obj;
 typedef struct sObjString sObjString;

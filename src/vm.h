@@ -1,6 +1,14 @@
 #ifndef ghost_vm_h
 #define ghost_vm_h
 
+// This defines the virtual machine that executes instructions. Ghost's virtual
+// machine is one part of its internal architecture. You hand it a chunk of
+// code--literally a chunk--and it runs it.
+//
+// The main entry point into the VM is through the interpret() method. The VM
+// runs the chunk and then responds with an interpresation result, indicating
+// if the code was successful or encountered any compile or runtime errors.
+
 #include "chunk.h"
 #include "value.h"
 
