@@ -1,0 +1,5 @@
+class Example {
+    __constructor() {
+        // This is the constructor method.
+    }
+}
