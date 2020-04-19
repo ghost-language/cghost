@@ -3,6 +3,23 @@
 
 #include "common.h"
 
+// This defines the built-in types and their core representations in memory.
+// Since Ghost is dynamically typed, any variable can hold a value of any type,
+// and the type can change at runtime. Implementing this efficiently is
+// critical for performance.
+//
+// The main type exposed by this is [Value]. A C variable of that type is a
+// storage location that can hold any Ghost value. The stack, global variables,
+// and instance fields are all implemented in C as variables of type Value.
+//
+// The built-in types for booleans, numbers, and nil are unboxed: their value
+// is stored directly in the Value, and copying a Value copies the value. Other
+// types--classes, instances of classes, functions, lists, and strings--are all
+// reference types. They are stored on the heap and the Value just stores a
+// pointer to it. Copying the Value copies a reference to the same object. The
+// Ghost implementation calls these "Obj", or objects, though to a user, all
+// values are objects.
+
 typedef struct sObj Obj;
 typedef struct sObjString sObjString;
 
