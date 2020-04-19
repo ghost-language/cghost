@@ -3,3 +3,19 @@ class Example {
         // This is the constructor method.
     }
 }
+
+class Mammal {
+    breath() {
+        print "inhale and exhale";
+    }
+}
+
+class Dog extends Mammal {
+    speak() {
+        print "wan-wan";
+    }
+}
+
+let soma = Dog();
+soma.breath();
+soma.speak();
