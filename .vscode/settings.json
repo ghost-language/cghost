@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "compiler.h": "c"
+        "compiler.h": "c",
+        "object.h": "c"
     }
 }

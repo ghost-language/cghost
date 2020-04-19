@@ -13,10 +13,10 @@
 // These flags are useful for debuggin and hacking on Ghost itself. They are not
 // intended to be used for production code. They default to off.
 
-// Set this to true to print out the compiled bytecode.
-#define DEBUG_PRINT_CODE false
+// Uncomment this to print out the compiled bytecode.
+// #define DEBUG_PRINT_CODE
 
-// Set this to true to print out executions as they occur.
-#define DEBUG_TRACE_EXECUTION false
+// Uncomment this to print out executions as they occur.
+// #define DEBUG_TRACE_EXECUTION
 
 #endif
