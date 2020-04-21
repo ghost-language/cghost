@@ -1,0 +1,23 @@
+// This is the print() function. print() will output the given value
+// and a new line character.
+print("Hello");
+print("world!");
+// Hello
+// world!
+
+// This is the write() function. write() will output the given value.
+// Subsequent calls to write() will pick up immediately on the same line.
+write("Hello");
+write("world!");
+// Helloworld!
+
+Math::abs()         math.abs()          math_abs()
+Math::acos()        math.acos()         math_acos()
+Math::acosh()       math.acosh()        math_acosh()
+Math::asin()        math.asin()         math_asin()
+Math::asinh()       math.asinh()        math_asinh()
+Math::atan()        math.atan()         math_atan()
+Math::atan2()       math.atan2()        math_atan2()
+Math::atanh()       math.atanh()        math_atanh()
+Math::ceil()        math.ceil()         math_ceil()
+Math::cos()         math.cos()          math_cos()

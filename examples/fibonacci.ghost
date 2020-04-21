@@ -1,0 +1,9 @@
+function fibonacci(layers) {
+    if (layers < 2) return layers;
+
+    return fibonacci(layers - 2) + fibonacci(layers - 1);
+}
+
+let start = clock();
+print fibonacci(35);
+print clock() - start;
