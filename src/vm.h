@@ -9,6 +9,7 @@
 // runs the chunk and then responds with an interpresation result, indicating
 // if the code was successful or encountered any compile or runtime errors.
 
+#include "table.h"
 #include "chunk.h"
 #include "value.h"
 
@@ -19,6 +20,7 @@ typedef struct {
     uint8_t* ip;
     Value stack[STACK_MAX];
     Value* stackTop;
+    Table strings;
 
     Obj* objects;
 } VM;
