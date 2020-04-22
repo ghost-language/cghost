@@ -91,7 +91,7 @@ static InterpretResult run() {
         } while (false)
 
     for (;;) {
-        #ifdef DEBUG_TRACE_EXECUTION
+        #if DEBUG_TRACE_EXECUTION
             printf("          ");
 
             for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
@@ -160,9 +160,14 @@ static InterpretResult run() {
                 break;
             }
 
-            case OP_RETURN: {
+            case OP_PRINT: {
                 printValue(pop());
                 printf("\n");
+                break;
+            }
+
+            case OP_RETURN: {
+                // Exit interpreter
 
                 return INTERPRET_OK;
             }
