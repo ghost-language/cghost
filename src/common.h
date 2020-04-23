@@ -19,4 +19,6 @@
 // Set to true to print out executions as they occur.
 #define DEBUG_TRACE_EXECUTION false
 
+#define UINT8_COUNT (UINT8_MAX + 1)
+
 #endif

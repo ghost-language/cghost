@@ -1,0 +1,12 @@
+let globalMessage = "Hello from the global scope!";
+
+{
+    let localMessage = "Hello from the local scope!";
+
+    print globalMessage;
+    print localMessage;
+}
+
+let localMessage = "Hello from the once local but now global scope, again!";
+
+print localMessage;
