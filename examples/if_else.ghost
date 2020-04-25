@@ -13,3 +13,9 @@ if (! true) {
 }
 
 print "End of second example. Should return 'false!'.";
+
+if (true and true) {
+    print "true and true!";
+} else {
+    print "false!";
+}

@@ -7,6 +7,6 @@ let globalMessage = "Hello from the global scope!";
     print localMessage;
 }
 
-let localMessage = "Hello from the once local but now global scope, again!";
+// let localMessage = "Hello from the once local but now global scope, again!";
 
 print localMessage;
