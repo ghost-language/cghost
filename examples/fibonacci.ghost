@@ -4,6 +4,11 @@ function fibonacci(layers) {
     return fibonacci(layers - 2) + fibonacci(layers - 1);
 }
 
-let start = clock();
-print fibonacci(35);
-print clock() - start;
+// print time();
+write("This is a line.");
+
+// let start = clock();
+// print start;
+// print clock() - start;
+// print fibonacci(2);
+// print clock() - start;
