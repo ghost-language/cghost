@@ -1,5 +1,11 @@
-function hello() {
-    print "hello world!";
+function fib(n) {
+    if (n < 2) return n;
+
+    return fib(n - 2) + fib(n - 1);
 }
 
-print hello;
+function hello(name) {
+    print "Hello, " + name;
+}
+
+hello("Kai");
