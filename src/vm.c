@@ -18,7 +18,7 @@ static void resetStack() {
     vm.frameCount = 0;
 }
 
-static void runtimeError(const char* format, ...) {
+void runtimeError(const char* format, ...) {
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
