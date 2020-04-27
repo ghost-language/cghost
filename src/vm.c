@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "object.h"
 #include "memory.h"
+#include "native.h"
 #include "vm.h"
 
 VM vm;
@@ -69,6 +70,8 @@ void initVM() {
 
     initTable(&vm.globals);
     initTable(&vm.strings);
+
+    defineAllNatives();
 }
 
 void freeVM() {
