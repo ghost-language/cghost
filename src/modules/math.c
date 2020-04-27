@@ -6,9 +6,6 @@
 #include "../object.h"
 #include "../vm.h"
 
-#undef PI
-#define PI (3.141592653589793238462643383279502884)
-
 static Value mathAbsNative(int argCount, Value *args) {
     if (argCount == 0) {
         runtimeError("math_abs() expects exactly one argument.");
@@ -42,7 +39,7 @@ static Value mathAcosNative(int argCount, Value *args) {
 }
 
 static Value mathPiNative(int argCount, Value *args) {
-    return NUMBER_VAL(PI);
+    return NUMBER_VAL(M_PI);
 }
 
 const char *nativeMathNames[] = {
