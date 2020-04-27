@@ -49,4 +49,7 @@ InterpretResult interpret(const char* source);
 void push(Value value);
 Value pop();
 
+void defineNative(const char *name, NativeFn function);
+void defineNativeVoid(const char *name, NativeVoidFn function);
+
 #endif

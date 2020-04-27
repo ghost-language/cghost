@@ -12,47 +12,6 @@
 
 VM vm;
 
-// Native functions
-static Value clockNative(int argCount, Value* args) {
-    return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
-}
-
-static Value timeNative(int argCount, Value* args) {
-    return NUMBER_VAL((double)time(NULL));
-}
-
-static Value printNative(int argCount, Value* args) {
-    if (argCount == 0) {
-        printf("\n");
-        return BOOL_VAL(true);
-    }
-
-    for (int i = 0; i < argCount; i++) {
-        Value value = args[i];
-        printValue(value);
-        printf("\n");
-    }
-
-    return BOOL_VAL(true);
-}
-
-static Value writeNative(int argCount, Value* args) {
-    if (argCount == 0) {
-        printf(" ");
-        return BOOL_VAL(true);
-    }
-
-    for (int i = 0; i < argCount; i++) {
-        Value value = args[i];
-        printValue(value);
-        printf(" ");
-    }
-
-    return BOOL_VAL(true);
-}
-
-// ----------
-
 static void resetStack() {
     vm.stackTop = vm.stack;
     vm.frameCount = 0;
@@ -88,9 +47,17 @@ static void runtimeError(const char* format, ...) {
     resetStack();
 }
 
-static void defineNative(const char* name, NativeFn function) {
+void defineNative(const char* name, NativeFn function) {
     push(OBJ_VAL(copyString(name, (int)strlen(name))));
     push(OBJ_VAL(newNative(function)));
+    tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
+    pop();
+    pop();
+}
+
+void defineNativeVoid(const char* name, NativeVoidFn function) {
+    push(OBJ_VAL(copyString(name, (int)strlen(name))));
+    push(OBJ_VAL(newNativeVoid(function)));
     tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
     pop();
     pop();
@@ -102,11 +69,6 @@ void initVM() {
 
     initTable(&vm.globals);
     initTable(&vm.strings);
-
-    defineNative("clock", clockNative);
-    defineNative("time", timeNative);
-    defineNative("print", printNative);
-    defineNative("write", writeNative);
 }
 
 void freeVM() {
@@ -161,6 +123,14 @@ static bool callValue(Value callee, int argCount) {
                 Value result = native(argCount, vm.stackTop - argCount);
                 vm.stackTop -= argCount + 1;
                 push(result);
+                return true;
+            }
+
+            case OBJ_NATIVE_VOID: {
+                NativeVoidFn native = AS_NATIVE_VOID(callee);
+
+                vm.stackTop -= argCount + 1;
+                push(NIL_VAL);
                 return true;
             }
 

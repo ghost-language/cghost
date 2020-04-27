@@ -28,6 +28,11 @@ static void freeObject(Obj* object) {
             break;
         }
 
+        case OBJ_NATIVE_VOID: {
+            FREE(ObjNativeVoid, object);
+            break;
+        }
+
         case OBJ_STRING: {
             ObjString* string = (ObjString*)object;
 
