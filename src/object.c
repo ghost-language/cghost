@@ -37,6 +37,13 @@ ObjNative* newNative(NativeFn function) {
     return native;
 }
 
+ObjNativeVoid *newNativeVoid(NativeVoidFn function) {
+    ObjNativeVoid* native = ALLOCATE_OBJ(ObjNativeVoid, OBJ_NATIVE_VOID);
+    native->function = function;
+
+    return native;
+}
+
 static ObjString* allocateString(char* chars, int length, uint32_t hash) {
     ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
     string->length = length;
@@ -107,6 +114,9 @@ void printObject(Value value) {
             break;
         case OBJ_NATIVE:
             printf("<native fn>");
+            break;
+        case OBJ_NATIVE_VOID:
+            printf("<native void fn>");
             break;
         case OBJ_STRING:
             printf("%s", AS_CSTRING(value));
