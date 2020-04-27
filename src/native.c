@@ -12,41 +12,6 @@ static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
-static Value mathAbsNative(int argCount, Value* args) {
-    if (argCount == 0) {
-        runtimeError("math_abs() expects exactly one argument.");
-        return NIL_VAL;
-    }
-
-    if (!IS_NUMBER(args[0])) {
-        runtimeError("math_abs() expects a number argument.");
-        return NIL_VAL;
-    }
-
-    Value number = args[0];
-
-    return NUMBER_VAL(abs((int)AS_NUMBER(number)));
-}
-
-static Value mathAcosNative(int argCount, Value *args)
-{
-    if (argCount == 0)
-    {
-        runtimeError("math_acos() expects exactly one argument.");
-        return NIL_VAL;
-    }
-
-    if (!IS_NUMBER(args[0]))
-    {
-        runtimeError("math_abs() expects a number argument.");
-        return NIL_VAL;
-    }
-
-    Value number = args[0];
-
-    return NUMBER_VAL(acos((int)AS_NUMBER(number)));
-}
-
 static void printNative(int argCount, Value *args) {
     if (argCount == 0) {
         printf("\n");
@@ -78,11 +43,11 @@ static void writeNative(int argCount, Value *args) {
 }
 
 const char* nativeNames[] = {
-    "clock", "math_abs", "math_acos"
+    "clock",
 };
 
 NativeFn nativeFunctions[] = {
-    clockNative, mathAbsNative, mathAcosNative,
+    clockNative,
 };
 
 const char* nativeVoidNames[] = {

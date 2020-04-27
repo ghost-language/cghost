@@ -10,6 +10,7 @@
 #include "memory.h"
 #include "native.h"
 #include "vm.h"
+#include "modules/math.h"
 
 VM vm;
 
@@ -72,6 +73,7 @@ void initVM() {
     initTable(&vm.strings);
 
     defineAllNatives();
+    defineAllMathNatives();
 }
 
 void freeVM() {
