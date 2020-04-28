@@ -1,3 +1,0 @@
-for (;;) {
-    print "For forever, press ctrl + c to end.";
-}

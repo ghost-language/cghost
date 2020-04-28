@@ -1,3 +1,0 @@
-while (true) {
-    print "true, press ctrl + c to end.";
-}
