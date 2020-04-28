@@ -2,3 +2,4 @@
 build/
 .DS_Store
 ghost
+ghost_history.txt

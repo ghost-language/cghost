@@ -7,22 +7,27 @@
 #include "chunk.h"
 #include "debug.h"
 #include "vm.h"
+#include "vendor/linenoise.h"
+
+#define VERSION "dev-master"
 
 static void repl() {
-    char line[1024];
+    char *line;
 
-    puts("Ghost (" ANSI_COLOR_CYAN "dev-master" ANSI_COLOR_RESET ")");
+    puts("Ghost (" ANSI_COLOR_CYAN VERSION ANSI_COLOR_RESET ")");
     puts("Press Ctrl + C to exit\n");
 
-    for (;;) {
-        fputs(ANSI_COLOR_GREEN ">>> " ANSI_COLOR_RESET, stdout);
+    linenoiseHistoryLoad("ghost_history.txt");
 
-        if (!fgets(line, sizeof(line), stdin)) {
-            printf("\n");
-            break;
-        }
+    while ((line = linenoise(">>> ")) != NULL)
+    {
+        char *fullLine = malloc(sizeof(char) * (strlen(line) + 1));
+        snprintf(fullLine, strlen(line) + 1, "%s", line);
 
-        interpret(line);
+        linenoiseHistoryAdd(line);
+        linenoiseHistorySave("ghost_history.txt");
+
+        interpret(fullLine);
     }
 }
 
