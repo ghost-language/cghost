@@ -1,0 +1,11 @@
+function outer() {
+    let x = "outside";
+
+    function inner() {
+        print(x);
+    }
+
+    inner();
+}
+
+outer();
