@@ -244,7 +244,11 @@ static void endScope() {
     // specialized OP_POPN instruction that takes an operand for
     // the number of slots to pop and pop them all at once.
     while (current->localCount > 0 && current->locals[current->localCount - 1].depth > current->scopeDepth) {
-        emitByte(OP_POP);
+        if (current->locals[current->localCount - 1].isCaptured) {
+            emitByte(OP_CLOSE_UPVALUE);
+        } else {
+            emitByte(OP_POP);
+        }
         current->localCount--;
     }
 }
