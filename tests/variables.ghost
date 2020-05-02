@@ -1,0 +1,5 @@
+let breakfast = "bagels";
+let beverage = "coffee";
+breakfast = "bagels with " + beverage;
+
+print(breakfast);

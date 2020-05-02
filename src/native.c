@@ -12,10 +12,10 @@ static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
-static void printNative(int argCount, Value *args) {
+static Value printNative(int argCount, Value *args) {
     if (argCount == 0) {
         printf("\n");
-        return;
+        return NIL_VAL;
     }
 
     for (int i = 0; i < argCount; i++) {
@@ -24,38 +24,44 @@ static void printNative(int argCount, Value *args) {
         printf("\n");
     }
 
-    return;
+    return NIL_VAL;
 }
 
-static void writeNative(int argCount, Value *args) {
-    if (argCount == 0) {
-        printf("%c", '\0');
-        return;
+static Value writeNative(int argCount, Value *args)
+{
+    if (argCount == 0)
+    {
+        return NIL_VAL;
     }
 
-    for (int i = 0; i < argCount; i++) {
+    for (int i = 0; i < argCount; i++)
+    {
         Value value = args[i];
         printValue(value);
-        printf("%c", '\0');
+        printf(" ");
     }
 
-    return;
+    return NIL_VAL;
 }
 
-const char* nativeNames[] = {
+const char *nativeNames[] = {
     "clock",
+    "print",
+    "write",
 };
 
 NativeFn nativeFunctions[] = {
     clockNative,
+    printNative,
+    writeNative,
 };
 
 const char* nativeVoidNames[] = {
-    "print", "write",
+    //
 };
 
 NativeVoidFn nativeVoidFunctions[] = {
-    printNative, writeNative,
+    //
 };
 
 void defineAllNatives() {
