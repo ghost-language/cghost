@@ -26,6 +26,7 @@ typedef enum {
     OBJ_NATIVE,
     OBJ_NATIVE_VOID,
     OBJ_STRING,
+    OBJ_UPVALUE
 } ObjType;
 
 struct sObj {
@@ -36,6 +37,7 @@ struct sObj {
 typedef struct {
     Obj obj;
     int arity;
+    int upvalueCount;
     Chunk chunk;
     ObjString* name;
 } ObjFunction;
@@ -60,6 +62,11 @@ struct sObjString {
     uint32_t hash;
 };
 
+typedef struct sUpvalue {
+    Obj obj;
+    Value* location;
+} ObjUpvalue;
+
 typedef struct {
     Obj obj;
     ObjFunction* function;
@@ -71,6 +78,7 @@ ObjNative* newNative(NativeFn function);
 ObjNativeVoid* newNativeVoid(NativeVoidFn function);
 ObjString* takeString(char* chars, int length);
 ObjString* copyString(const char* chars, int length);
+ObjUpvalue* newUpvalue(Value* slot);
 void printObject(Value value);
 
 static inline bool isObjType(Value value, ObjType type) {
