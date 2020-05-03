@@ -1,0 +1,18 @@
+// Variables
+var x = 10;
+assert(x == 10, "variables can be assigned values.");
+
+var message =
+"hello world";
+assert(message == "hello world", "new lines are ignored during variable assignment.");
+
+x = 100;
+assert(x == 100, "declared variables can be reassigned values.");
+
+var x = 10;
+{
+    var x = 100;
+}
+assert(x == 10, "variables have a separate lexical scope within blocks.");
+
+print("All tests passed!");

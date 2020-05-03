@@ -185,8 +185,9 @@ static void closeUpvalues(Value* last) {
     }
 }
 
-static bool isFalsey(Value value) {
-    return IS_NULL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+bool isFalsey(Value value) {
+    return IS_NULL(value) ||
+           (IS_BOOL(value) && !AS_BOOL(value));
 }
 
 static void concatenate() {
@@ -288,7 +289,7 @@ static InterpretResult run() {
                 break;
             }
 
-            OP_SET_GLOBAL: {
+            case OP_SET_GLOBAL: {
                 ObjString* name = READ_STRING();
 
                 if (tableSet(&vm.globals, name, peek(0))) {
