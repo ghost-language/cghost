@@ -1,11 +1,9 @@
-function outer() {
-    let x = "outside";
-
-    function inner() {
-        print(x);
-    }
-
-    inner();
+function addPair(a, b) {
+    return a + b;
 }
 
-outer();
+function identity(a) {
+    return a;
+}
+
+print(identity(addPair)(1, 2));
