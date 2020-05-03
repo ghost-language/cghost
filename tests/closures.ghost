@@ -1,9 +1,0 @@
-function addPair(a, b) {
-    return a + b;
-}
-
-function identity(a) {
-    return a;
-}
-
-print(identity(addPair)(1, 2));

@@ -1,9 +1,0 @@
-var universe = false;
-
-print("Hello");
-
-if (universe == false) {
-    error("Universe not found!");
-}
-
-print("World");
