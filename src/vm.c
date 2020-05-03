@@ -22,6 +22,8 @@ static void resetStack() {
 }
 
 void runtimeError(const char* format, ...) {
+    fputs("Error: ", stderr);
+
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
