@@ -64,7 +64,7 @@ static ObjString* allocateString(char* chars, int length, uint32_t hash) {
     string->chars = chars;
     string->hash = hash;
 
-    tableSet(&vm.strings, string, NIL_VAL);
+    tableSet(&vm.strings, string, NULL_VAL);
 
     return string;
 }
@@ -114,7 +114,7 @@ ObjString* copyString(const char* chars, int length) {
 
 ObjUpvalue* newUpvalue(Value* slot) {
     ObjUpvalue* upvalue = ALLOCATE_OBJ(ObjUpvalue, OBJ_UPVALUE);
-    upvalue->closed = NIL_VAL;
+    upvalue->closed = NULL_VAL;
     upvalue->location = slot;
     upvalue->next = NULL;
     return upvalue;

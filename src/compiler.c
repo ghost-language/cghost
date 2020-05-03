@@ -165,7 +165,7 @@ static int emitJump(uint8_t instruction) {
 
 static void emitReturn()
 {
-    emitByte(OP_NIL);
+    emitByte(OP_NULL);
     emitByte(OP_RETURN);
 }
 
@@ -443,7 +443,7 @@ static void call(bool canAssign) {
 static void literal(bool canAssign) {
     switch (parser.previous.type) {
         case TOKEN_FALSE: emitByte(OP_FALSE); break;
-        case TOKEN_NIL: emitByte(OP_NIL); break;
+        case TOKEN_NULL: emitByte(OP_NULL); break;
         case TOKEN_TRUE: emitByte(OP_TRUE); break;
         default:
             // Unreachable
@@ -557,7 +557,7 @@ ParseRule rules[] = {
     {NULL, NULL, PREC_NONE},         // TOKEN_FOR
     {NULL, NULL, PREC_NONE},         // TOKEN_FUNCTION
     {NULL, NULL, PREC_NONE},         // TOKEN_IF
-    {literal, NULL, PREC_NONE},      // TOKEN_NIL
+    {literal, NULL, PREC_NONE},      // TOKEN_NULL
     {NULL, or_, PREC_OR},            // TOKEN_OR
     {NULL, NULL, PREC_NONE},         // TOKEN_PRINT
     {NULL, NULL, PREC_NONE},         // TOKEN_RETURN
@@ -662,7 +662,7 @@ static void varDeclaration() {
     if (match(TOKEN_EQUAL)) {
         expression();
     } else {
-        emitByte(OP_NIL);
+        emitByte(OP_NULL);
     }
 
     consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration.");

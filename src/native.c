@@ -15,7 +15,7 @@ static Value clockNative(int argCount, Value* args) {
 static Value printNative(int argCount, Value *args) {
     if (argCount == 0) {
         printf("\n");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     for (int i = 0; i < argCount; i++) {
@@ -24,14 +24,14 @@ static Value printNative(int argCount, Value *args) {
         printf("\n");
     }
 
-    return NIL_VAL;
+    return NULL_VAL;
 }
 
 static Value writeNative(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     for (int i = 0; i < argCount; i++)
@@ -41,7 +41,7 @@ static Value writeNative(int argCount, Value *args)
         printf(" ");
     }
 
-    return NIL_VAL;
+    return NULL_VAL;
 }
 
 const char *nativeNames[] = {
