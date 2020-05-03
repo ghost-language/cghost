@@ -31,15 +31,31 @@ static Value writeNative(int argCount, Value *args)
 {
     if (argCount == 0)
     {
+        printf(" ");
+        fflush(stdout);
         return NULL_VAL;
     }
 
     for (int i = 0; i < argCount; i++)
     {
         Value value = args[i];
+
         printValue(value);
-        printf(" ");
+        fflush(stdout);
     }
+
+    return NULL_VAL;
+}
+
+static Value errorNative(int argCount, Value *args)
+{
+    if (argCount == 0)
+    {
+        return NULL_VAL;
+    }
+
+    runtimeError(AS_CSTRING(args[0]));
+    exit(70);
 
     return NULL_VAL;
 }
@@ -48,20 +64,22 @@ const char *nativeNames[] = {
     "clock",
     "print",
     "write",
+    "error",
 };
 
 NativeFn nativeFunctions[] = {
     clockNative,
     printNative,
     writeNative,
+    errorNative
 };
 
 const char* nativeVoidNames[] = {
-    //
+
 };
 
 NativeVoidFn nativeVoidFunctions[] = {
-    //
+
 };
 
 void defineAllNatives() {
