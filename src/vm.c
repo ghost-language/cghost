@@ -136,7 +136,7 @@ static bool callValue(Value callee, int argCount) {
                 NativeVoidFn native = AS_NATIVE_VOID(callee);
 
                 vm.stackTop -= argCount + 1;
-                push(NIL_VAL);
+                push(NULL_VAL);
                 return true;
             }
 
@@ -183,7 +183,7 @@ static void closeUpvalues(Value* last) {
 }
 
 static bool isFalsey(Value value) {
-    return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+    return IS_NULL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
 static void concatenate() {
@@ -247,7 +247,7 @@ static InterpretResult run() {
                 break;
             }
 
-            case OP_NIL: push(NIL_VAL); break;
+            case OP_NULL: push(NULL_VAL); break;
             case OP_TRUE: push(BOOL_VAL(true)); break;
             case OP_FALSE: push(BOOL_VAL(false)); break;
             case OP_POP: pop(); break;

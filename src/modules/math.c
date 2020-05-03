@@ -18,13 +18,13 @@ mathAbs(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_abs() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_abs() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -38,13 +38,13 @@ mathAcos(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_acos() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_abs() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -58,13 +58,13 @@ mathAsin(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_asin() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_asin() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -78,13 +78,13 @@ mathAtan(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_atan() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_atan() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -98,13 +98,13 @@ mathCeil(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_ceil() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_ceil() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -118,13 +118,13 @@ mathCos(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_cos() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_cos() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -138,13 +138,13 @@ mathFloor(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_floor() expects exactly one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
         runtimeError("math_floor() expects a number argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     Value number = args[0];
@@ -158,7 +158,7 @@ mathMax(int argCount, Value *args)
     if (argCount == 0)
     {
         runtimeError("math_max() expects at least one argument.");
-        return NIL_VAL;
+        return NULL_VAL;
     }
 
     double max = AS_NUMBER(args[0]);

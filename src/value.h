@@ -10,7 +10,7 @@
 // storage location that can hold any Ghost value. The stack, global variables,
 // and instance fields are all implemented in C as variables of type Value.
 //
-// The built-in types for booleans, numbers, and nil are unboxed: their value
+// The built-in types for booleans, numbers, and null are unboxed: their value
 // is stored directly in the Value, and copying a Value copies the value. Other
 // types--classes, instances of classes, functions, lists, and strings--are all
 // reference types. They are stored on the heap and the Value just stores a
@@ -25,7 +25,7 @@ typedef struct sObjString ObjString;
 
 typedef enum {
     VAL_BOOL,
-    VAL_NIL,
+    VAL_NULL,
     VAL_NUMBER,
     VAL_OBJ
 } ValueType;
@@ -40,7 +40,7 @@ typedef struct {
 } Value;
 
 #define IS_BOOL(value)   ((value).type == VAL_BOOL)
-#define IS_NIL(value)    ((value).type == VAL_NIL)
+#define IS_NULL(value)    ((value).type == VAL_NULL)
 #define IS_NUMBER(value) ((value).type == VAL_NUMBER)
 #define IS_OBJ(value)    ((value).type == VAL_OBJ)
 
@@ -49,7 +49,7 @@ typedef struct {
 #define AS_NUMBER(value) ((value).as.number)
 
 #define BOOL_VAL(value)   ((Value) { VAL_BOOL, { .boolean = value }})
-#define NIL_VAL           ((Value) { VAL_NIL, { .number = 0 }})
+#define NULL_VAL           ((Value) { VAL_NULL, { .number = 0 }})
 #define NUMBER_VAL(value) ((Value) { VAL_NUMBER, { .number = value }})
 #define OBJ_VAL(object)   ((Value) { VAL_OBJ, { .obj = (Obj*)object }})
 
