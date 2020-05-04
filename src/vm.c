@@ -360,12 +360,6 @@ static InterpretResult run() {
                 break;
             }
 
-            case OP_PRINT: {
-                printValue(pop());
-                printf("\n");
-                break;
-            }
-
             case OP_JUMP: {
                 uint16_t offset = READ_SHORT();
                 frame->ip += offset;
