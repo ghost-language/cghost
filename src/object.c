@@ -13,9 +13,14 @@
 static Obj* allocateObject(size_t size, ObjType type) {
     Obj* object = (Obj*)reallocate(NULL, 0, size);
     object->type = type;
+    object->isMarked = false;
 
     object->next = vm.objects;
     vm.objects = object;
+
+    #if DEBUG_LOG_GC
+        printf("%p allocate %ld for %d\n", (void*)object, size, type);
+    #endif
 
     return object;
 }
@@ -51,20 +56,15 @@ ObjNative* newNative(NativeFn function) {
     return native;
 }
 
-ObjNativeVoid *newNativeVoid(NativeVoidFn function) {
-    ObjNativeVoid* native = ALLOCATE_OBJ(ObjNativeVoid, OBJ_NATIVE_VOID);
-    native->function = function;
-
-    return native;
-}
-
 static ObjString* allocateString(char* chars, int length, uint32_t hash) {
     ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
     string->length = length;
     string->chars = chars;
     string->hash = hash;
 
+    push(OBJ_VAL(string));
     tableSet(&vm.strings, string, NULL_VAL);
+    pop();
 
     return string;
 }
@@ -139,9 +139,6 @@ void printObject(Value value) {
             break;
         case OBJ_NATIVE:
             printf("<native fn>");
-            break;
-        case OBJ_NATIVE_VOID:
-            printf("<native void fn>");
             break;
         case OBJ_STRING:
             printf("%s", AS_CSTRING(value));

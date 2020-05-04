@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "compiler.h"
+#include "memory.h"
 #include "scanner.h"
 
 #if DEBUG_PRINT_CODE
@@ -561,7 +562,6 @@ ParseRule rules[] = {
     {NULL, NULL, PREC_NONE},         // TOKEN_IF
     {literal, NULL, PREC_NONE},      // TOKEN_NULL
     {NULL, or_, PREC_OR},            // TOKEN_OR
-    {NULL, NULL, PREC_NONE},         // TOKEN_PRINT
     {NULL, NULL, PREC_NONE},         // TOKEN_RETURN
     {NULL, NULL, PREC_NONE},         // TOKEN_SUPER
     {NULL, NULL, PREC_NONE},         // TOKEN_THIS
@@ -747,12 +747,6 @@ static void ifStatement() {
     patchJump(elseJump);
 }
 
-static void printStatement() {
-    expression();
-    consume(TOKEN_SEMICOLON, "Expect ';' after value.");
-    emitByte(OP_PRINT);
-}
-
 static void returnStatement() {
     if (current->type == TYPE_SCRIPT) {
         error("Cannot return from top-level code.");
@@ -798,7 +792,6 @@ static void synchronize() {
             case TOKEN_FOR:
             case TOKEN_IF:
             case TOKEN_WHILE:
-            case TOKEN_PRINT:
             case TOKEN_RETURN:
                 return;
 
@@ -824,9 +817,7 @@ static void declaration() {
 }
 
 static void statement() {
-    if (match(TOKEN_PRINT)) {
-        printStatement();
-    } else if (match(TOKEN_FOR)) {
+    if (match(TOKEN_FOR)) {
         forStatement();
     } else if (match(TOKEN_IF)) {
         ifStatement();
@@ -860,4 +851,13 @@ ObjFunction* compile(const char* source) {
     ObjFunction* function = endCompiler();
 
     return parser.hadError ? NULL : function;
+}
+
+void markCompilerRoots() {
+    Compiler* compiler = current;
+
+    while (compiler != NULL) {
+        markObject((Obj*)compiler->function);
+        compiler = compiler->enclosing;
+    }
 }

@@ -61,17 +61,16 @@ void defineNative(const char* name, NativeFn function) {
     pop();
 }
 
-void defineNativeVoid(const char* name, NativeVoidFn function) {
-    push(OBJ_VAL(copyString(name, (int)strlen(name))));
-    push(OBJ_VAL(newNativeVoid(function)));
-    tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
-    pop();
-    pop();
-}
-
 void initVM() {
     resetStack();
     vm.objects = NULL;
+
+    vm.bytesAllocated = 0;
+    vm.nextGC = 1024 * 1024;
+
+    vm.grayCount = 0;
+    vm.grayCapacity = 0;
+    vm.grayStack = NULL;
 
     initTable(&vm.globals);
     initTable(&vm.strings);
@@ -135,14 +134,6 @@ static bool callValue(Value callee, int argCount) {
                 return true;
             }
 
-            case OBJ_NATIVE_VOID: {
-                NativeVoidFn native = AS_NATIVE_VOID(callee);
-
-                vm.stackTop -= argCount + 1;
-                push(NULL_VAL);
-                return true;
-            }
-
             default:
                 // Non-callable object type
                 break;
@@ -191,8 +182,8 @@ bool isFalsey(Value value) {
 }
 
 static void concatenate() {
-    ObjString* b = AS_STRING(pop());
-    ObjString* a = AS_STRING(pop());
+    ObjString* b = AS_STRING(peek(0));
+    ObjString* a = AS_STRING(peek(1));
 
     int length = a->length + b->length;
     char* chars = ALLOCATE(char, length + 1);
@@ -201,6 +192,8 @@ static void concatenate() {
     chars[length] = '\0';
 
     ObjString* result = takeString(chars, length);
+    pop();
+    pop();
     push(OBJ_VAL(result));
 }
 
@@ -364,12 +357,6 @@ static InterpretResult run() {
 
                 push(NUMBER_VAL(-AS_NUMBER(pop())));
 
-                break;
-            }
-
-            case OP_PRINT: {
-                printValue(pop());
-                printf("\n");
                 break;
             }
 

@@ -19,6 +19,15 @@
 // Set to true to print out executions as they occur.
 #define DEBUG_TRACE_EXECUTION false
 
+// Set to true to stress test the garbage collector,
+// forcing the garbage collector to run as often as
+// it possibly can. This set to true will tank
+// performance so be sure to disable this before
+// compiling the final executable.
+#define DEBUG_STRESS_GC false
+
+#define DEBUG_LOG_GC false
+
 #define UINT8_COUNT (UINT8_MAX + 1)
 
 #endif
