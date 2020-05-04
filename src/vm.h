@@ -33,7 +33,14 @@ typedef struct {
     Table strings;
     ObjUpvalue* openUpvalues;
 
+    // Garbage collection bookkeeping
+    size_t bytesAllocated;
+    size_t nextGC;
+
     Obj* objects;
+    int grayCount;
+    int grayCapacity;
+    Obj** grayStack;
 } VM;
 
 typedef enum {
