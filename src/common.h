@@ -24,9 +24,9 @@
 // it possibly can. This set to true will tank
 // performance so be sure to disable this before
 // compiling the final executable.
-#define DEBUG_STRESS_GC true
+#define DEBUG_STRESS_GC false
 
-#define DEBUG_LOG_GC true
+#define DEBUG_LOG_GC false
 
 #define UINT8_COUNT (UINT8_MAX + 1)
 
