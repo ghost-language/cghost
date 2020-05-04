@@ -61,14 +61,6 @@ void defineNative(const char* name, NativeFn function) {
     pop();
 }
 
-void defineNativeVoid(const char* name, NativeVoidFn function) {
-    push(OBJ_VAL(copyString(name, (int)strlen(name))));
-    push(OBJ_VAL(newNativeVoid(function)));
-    tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
-    pop();
-    pop();
-}
-
 void initVM() {
     resetStack();
     vm.objects = NULL;
@@ -139,14 +131,6 @@ static bool callValue(Value callee, int argCount) {
                 Value result = native(argCount, vm.stackTop - argCount);
                 vm.stackTop -= argCount + 1;
                 push(result);
-                return true;
-            }
-
-            case OBJ_NATIVE_VOID: {
-                NativeVoidFn native = AS_NATIVE_VOID(callee);
-
-                vm.stackTop -= argCount + 1;
-                push(NULL_VAL);
                 return true;
             }
 

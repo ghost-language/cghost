@@ -58,7 +58,6 @@ void push(Value value);
 Value pop();
 
 void defineNative(const char *name, NativeFn function);
-void defineNativeVoid(const char *name, NativeVoidFn function);
 
 void runtimeError(const char *format, ...);
 bool isFalsey(Value value);
