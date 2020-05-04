@@ -95,6 +95,7 @@ static void blackenObject(Obj* object) {
             break;
 
         case OBJ_NATIVE:
+        case OBJ_NATIVE_VOID:
         case OBJ_STRING:
             break;
     }
@@ -197,6 +198,7 @@ static void sweep() {
 void collectGarbage() {
     #if DEBUG_LOG_GC
         printf("-- gc begin\n");
+        size_t before = vm.bytesAllocated;
     #endif
 
     markRoots();
@@ -208,6 +210,7 @@ void collectGarbage() {
 
     #if DEBUG_LOG_GC
             printf("-- gc end\n");
+            printf("   collected %ld bytes (from %ld to %ld) next at %ld\n", before - vm.bytesAllocated, before, vm.bytesAllocated, vm.nextGC);
     #endif
 }
 
