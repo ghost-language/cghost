@@ -5,9 +5,9 @@ function fib(n) {
     return fib(n - 2) + fib(n - 1);
 }
 
-let start = clock();
+var start = clock();
 print(fib(35) == 9227465);
-let end = clock();
+var end = clock();
 
 print("elapsed:");
 print(end - start);
