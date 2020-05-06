@@ -31,6 +31,7 @@ typedef struct {
     Value* stackTop;
     Table globals;
     Table strings;
+    ObjString* constructorString;
     ObjUpvalue* openUpvalues;
 
     // Garbage collection bookkeeping
