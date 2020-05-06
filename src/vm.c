@@ -75,6 +75,9 @@ void initVM() {
     initTable(&vm.globals);
     initTable(&vm.strings);
 
+    vm.constructorString = NULL;
+    vm.constructorString = copyString("constructor", 11);
+
     defineAllNatives();
     defineAllMathNatives();
 }
@@ -82,6 +85,9 @@ void initVM() {
 void freeVM() {
     freeTable(&vm.globals);
     freeTable(&vm.strings);
+
+    vm.constructorString = NULL;
+
     freeObjects();
 }
 
@@ -131,6 +137,15 @@ static bool callValue(Value callee, int argCount) {
             case OBJ_CLASS: {
                 ObjClass* klass = AS_CLASS(callee);
                 vm.stackTop[-argCount - 1] = OBJ_VAL(newInstance(klass));
+
+                Value constructor;
+                if (tableGet(&klass->methods, vm.constructorString, &constructor)) {
+                    return call(AS_CLOSURE(constructor), argCount);
+                } else if (argCount != 0) {
+                    runtimeError("Expected 0 arguments but got %d.", argCount);
+                    return false;
+                }
+
                 return true;
             }
 

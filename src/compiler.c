@@ -53,6 +53,7 @@ typedef struct {
 
 typedef enum {
     TYPE_FUNCTION,
+    TYPE_CONSTRUCTOR,
     TYPE_METHOD,
     TYPE_SCRIPT
 } FunctionType;
@@ -174,7 +175,12 @@ static int emitJump(uint8_t instruction) {
 
 static void emitReturn()
 {
-    emitByte(OP_NULL);
+    if (current->type == TYPE_CONSTRUCTOR) {
+        emitBytes(OP_GET_LOCAL, 0);
+    } else {
+        emitByte(OP_NULL);
+    }
+
     emitByte(OP_RETURN);
 }
 
@@ -692,6 +698,11 @@ static void method() {
     uint8_t constant = identifierConstant(&parser.previous);
 
     FunctionType type = TYPE_METHOD;
+
+    if (parser.previous.length == 11 && memcmp(parser.previous.start, "constructor", 11) == 0) {
+        type = TYPE_CONSTRUCTOR;
+    }
+
     function(type);
 
     emitBytes(OP_METHOD, constant);
@@ -828,9 +839,11 @@ static void returnStatement() {
     if (match(TOKEN_SEMICOLON)) {
         emitReturn();
     } else {
+        if (current->type == TYPE_CONSTRUCTOR) {
+            error("Cannot return a value from a constructor.");
+        }
+
         expression();
-        consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
-        emitByte(OP_RETURN);
     }
 }
 
