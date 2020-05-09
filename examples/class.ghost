@@ -1,3 +1,22 @@
+class Coffee {
+    constructor() {
+        this.name = "coffee";
+    }
+
+    printName() {
+        print(this.name);
+    }
+}
+
+class Latte extends Coffee {
+    constructor() {
+        this.name = "latte";
+    }
+}
+
+var latte = Latte();
+latte.printName();
+
 class CoffeeMaker {
     constructor(coffee) {
         this.coffee = coffee;
