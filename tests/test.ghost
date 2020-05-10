@@ -15,4 +15,27 @@ var x = 10;
 }
 assert(x == 10, "variables have a separate lexical scope within blocks.");
 
+class testClass
+{
+    constructor()
+    {
+        this.message = "Hello world!";
+    }
+
+    foobar()
+    {
+        return this.message;
+    }
+}
+
+var testClass = testClass();
+assert(testClass.foobar() == "Hello world!", "Class methods can return field values.");
+
+function returnMessage()
+{
+    return "Hello world!";
+}
+
+assert(returnMessage() == "Hello world!", "Functions can return values.");
+
 print("All tests passed!");
