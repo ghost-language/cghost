@@ -904,6 +904,8 @@ static void returnStatement() {
         }
 
         expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+        emitByte(OP_RETURN);
     }
 }
 
@@ -938,6 +940,7 @@ static void synchronize() {
             case TOKEN_FOR:
             case TOKEN_IF:
             case TOKEN_WHILE:
+            case TOKEN_EXTENDS:
             case TOKEN_RETURN:
                 return;
 
