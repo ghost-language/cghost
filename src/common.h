@@ -10,6 +10,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// Set to true to utilize NaN-boxing for representing values in Ghost.
+// If Ghost does not compile on your machine, try disabling this.
+// You'll get a slight performance hit but at least you'll be
+// able to use Ghost!
+#define NAN_BOXING true
+
 // These flags are useful for debuggin and hacking on Ghost itself. They are not
 // intended to be used for production code. They default to off.
 
