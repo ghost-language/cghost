@@ -9,6 +9,7 @@
 #include "debug.h"
 #include "object.h"
 #include "memory.h"
+#include "modules/modules.h"
 #include "native.h"
 #include "vm.h"
 #include "modules/math.h"
@@ -79,7 +80,7 @@ void initVM() {
     vm.constructorString = copyString("constructor", 11);
 
     defineAllNatives();
-    defineAllMathNatives();
+    registerMathModule();
 }
 
 void freeVM() {
@@ -185,22 +186,44 @@ static bool invokeFromClass(ObjClass* klass, ObjString* name, int argCount) {
 static bool invoke(ObjString* name, int argCount) {
     Value receiver = peek(argCount);
 
-    if (!IS_INSTANCE(receiver)) {
-        runtimeError("Only instances have methods.");
+    if (!IS_OBJ(receiver)) {
+        runtimeError("Can only invoke on objects.");
         return false;
     }
 
-    ObjInstance* instance = AS_INSTANCE(receiver);
+    switch (getObjType(receiver)) {
+        case OBJ_NATIVE_CLASS: {
+            ObjNativeClass *instance = AS_NATIVE_CLASS(receiver);
 
-    Value value;
+            Value function;
 
-    if (tableGet(&instance->fields, name, &value)) {
-        vm.stackTop[-argCount - 1] = value;
+            if (!tableGet(&instance->methods, name, &function)) {
+                runtimeError("Undefined property '%s'.", name->chars);
+                return false;
+            }
 
-        return callValue(value, argCount);
+            return callValue(function, argCount);
+        }
+
+         case OBJ_INSTANCE: {
+             ObjInstance* instance = AS_INSTANCE(receiver);
+
+            Value value;
+
+            if (tableGet(&instance->fields, name, &value)) {
+                vm.stackTop[-argCount - 1] = value;
+
+                return callValue(value, argCount);
+            }
+
+            return invokeFromClass(instance->klass, name, argCount);
+         }
+
+         default: {
+             runtimeError("Only instances have methods.");
+             return false;
+         }
     }
-
-    return invokeFromClass(instance->klass, name, argCount);
 }
 
 static bool bindMethod(ObjClass* klass, ObjString* name) {

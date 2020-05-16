@@ -41,6 +41,13 @@ ObjClass* newClass(ObjString* name) {
     return klass;
 }
 
+ObjNativeClass* newNativeClass(ObjString *name) {
+    ObjNativeClass* klass = ALLOCATE_OBJ(ObjNativeClass, OBJ_NATIVE_CLASS);
+    klass->name = name;
+    initTable(&klass->methods);
+    return klass;
+}
+
 ObjClosure* newClosure(ObjFunction* function) {
     ObjUpvalue** upvalues = ALLOCATE(ObjUpvalue*, function->upvalueCount);
     for (int i = 0; i < function->upvalueCount; i++) {
@@ -155,6 +162,7 @@ void printFunction(ObjFunction* function) {
 void printObject(Value value) {
     switch (OBJ_TYPE(value)) {
         case OBJ_CLASS:
+        case OBJ_NATIVE_CLASS:
             printf("%s", AS_CLASS(value)->name->chars);
             break;
         case OBJ_BOUND_METHOD:

@@ -1,9 +1,8 @@
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "math.h"
-#include "../native.h"
-#include "../object.h"
 #include "../vm.h"
 
 #undef PI
@@ -17,13 +16,13 @@ mathAbs(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_abs() expects exactly one argument.");
+        runtimeError("Math.abs() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_abs() expects a number argument.");
+        runtimeError("Math.abs() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -37,13 +36,13 @@ mathAcos(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_acos() expects exactly one argument.");
+        runtimeError("Math.acos() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_abs() expects a number argument.");
+        runtimeError("Math.abs() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -57,13 +56,13 @@ mathAsin(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_asin() expects exactly one argument.");
+        runtimeError("Math.asin() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_asin() expects a number argument.");
+        runtimeError("Math.asin() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -77,13 +76,13 @@ mathAtan(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_atan() expects exactly one argument.");
+        runtimeError("Math.atan() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_atan() expects a number argument.");
+        runtimeError("Math.atan() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -97,13 +96,13 @@ mathCeil(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_ceil() expects exactly one argument.");
+        runtimeError("Math.ceil() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_ceil() expects a number argument.");
+        runtimeError("Math.ceil() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -117,13 +116,13 @@ mathCos(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_cos() expects exactly one argument.");
+        runtimeError("Math.cos() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_cos() expects a number argument.");
+        runtimeError("Math.cos() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -137,13 +136,13 @@ mathFloor(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_floor() expects exactly one argument.");
+        runtimeError("Math.floor() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("math_floor() expects a number argument.");
+        runtimeError("Math.floor() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -157,7 +156,7 @@ mathMax(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("math_max() expects at least one argument.");
+        runtimeError("Math.max() expects at least one argument.");
         return NULL_VAL;
     }
 
@@ -173,39 +172,29 @@ mathMax(int argCount, Value *args)
     return NUMBER_VAL(max);
 }
 
-static Value
-mathPi(int argCount, Value *args)
+static Value mathPi(int argCount, Value *args)
 {
-    return NUMBER_VAL(M_PI);
+    return NUMBER_VAL(PI);
 }
 
-const char *mathNames[] = {
-    "math_abs",
-    "math_acos",
-    "math_asin",
-    "math_atan",
-    "math_ceil",
-    "math_cos",
-    "math_floor",
-    "math_max",
-    "math_pi",
-};
-
-NativeFn mathFunctions[] = {
-    mathAbs,
-    mathAcos,
-    mathAsin,
-    mathAtan,
-    mathCeil,
-    mathCos,
-    mathFloor,
-    mathMax,
-    mathPi};
-
-void defineAllMathNatives()
+void registerMathModule()
 {
-    for (uint8_t i = 0; i < sizeof(mathNames) / sizeof(mathNames[0]); i++)
-    {
-        defineNative(mathNames[i], mathFunctions[i]);
-    }
+    ObjString *name = copyString("Math", 4);
+    push(OBJ_VAL(name));
+    ObjNativeClass *klass = newNativeClass(name);
+    push(OBJ_VAL(klass));
+
+    defineNativeMethod(klass, "abs", mathAbs);
+    defineNativeMethod(klass, "acos", mathAcos);
+    defineNativeMethod(klass, "asin", mathAsin);
+    defineNativeMethod(klass, "atan", mathAtan);
+    defineNativeMethod(klass, "ceil", mathCeil);
+    defineNativeMethod(klass, "cos", mathCos);
+    defineNativeMethod(klass, "floor", mathFloor);
+    defineNativeMethod(klass, "max", mathMax);
+    defineNativeMethod(klass, "pi", mathPi);
+
+    tableSet(&vm.globals, name, OBJ_VAL(klass));
+    pop();
+    pop();
 }

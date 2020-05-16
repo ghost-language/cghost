@@ -87,6 +87,13 @@ static void blackenObject(Obj* object) {
             break;
         }
 
+        case OBJ_NATIVE_CLASS: {
+            ObjNativeClass *klass = (ObjNativeClass*)object;
+            markObject((Obj*)klass->name);
+            markTable(&klass->methods);
+            break;
+        }
+
         case OBJ_CLOSURE: {
             ObjClosure* closure = (ObjClosure*)object;
             markObject((Obj*)closure->function);
@@ -132,6 +139,13 @@ static void freeObject(Obj* object) {
             break;
         case OBJ_CLASS: {
             ObjClass* klass = (ObjClass*)object;
+            freeTable(&klass->methods);
+            FREE(ObjClass, object);
+            break;
+        }
+
+        case OBJ_NATIVE_CLASS: {
+            ObjNativeClass* klass = (ObjNativeClass*)object;
             freeTable(&klass->methods);
             FREE(ObjClass, object);
             break;
