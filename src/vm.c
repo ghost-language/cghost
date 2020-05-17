@@ -11,6 +11,7 @@
 #include "memory.h"
 #include "modules/modules.h"
 #include "native.h"
+#include "values/string.h"
 #include "utilities.h"
 #include "vm.h"
 #include "modules/math.h"
@@ -218,6 +219,10 @@ static bool invoke(ObjString* name, int argCount) {
             }
 
             return invokeFromClass(instance->klass, name, argCount);
+         }
+
+         case OBJ_STRING: {
+            return declareString(name->chars, argCount + 1);
          }
 
          default: {

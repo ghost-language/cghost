@@ -1,0 +1,68 @@
+class BMRCalculator
+{
+    constructor()
+    {
+        this.gender = "";
+        this.age = 0;
+        this.weight = 0;
+        this.height = 0;
+
+        this.greet();
+    }
+
+    greet()
+    {
+        print("Hello and welcome to the basal metabolic rate calculator program.");
+        print("My name is Operator-01.");
+        print();
+
+        print("Your basal metabolic rate (BMR) is the number of calories your");
+        print("body needs to maintain your current weight and function at rest.");
+        print();
+
+        print("This program will walk you through some simple questions to");
+        print("determine what your BMR rate is in order to make nutritional");
+        print("and activity adjustments depending on your goals.");
+        print();
+
+        print("Shall we get started?");
+        print();
+
+        this.askGender();
+    }
+
+    askGender()
+    {
+        this.gender = input("What is your biological gender ([M]ale, [F]emale)?").toLowerCase();
+
+        if (this.gender == "m") {
+            print("Registered as male.");
+            print();
+
+            return this.askAge();
+        }
+
+        if (this.gender == "f") {
+            print("Registered as female.");
+            print();
+
+            return this.askAge();
+        }
+
+        print("I'm sorry, I don't recognize your answer.");
+        print();
+
+        return this.askGender();
+    }
+
+    askAge()
+    {
+        var age = input("What is your age?");
+
+        print("Registered as " + age + ".");
+
+        this.age = age.toNumber();
+    }
+}
+
+BMRCalculator();
