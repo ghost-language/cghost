@@ -4,12 +4,62 @@
 #include <string.h>
 #include <time.h>
 
+#include "memory.h"
 #include "native.h"
 #include "object.h"
 #include "vm.h"
 
 static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value inputNative(int argCount, Value *args) {
+    if (argCount > 1) {
+        runtimeError("input() takes either 0 or 1 argument (%d given)", argCount);
+        return NULL_VAL;
+    }
+
+    if (argCount != 0) {
+        Value prompt = args[0];
+
+        if (!IS_STRING(prompt)) {
+            runtimeError("input() only takes a string argument");
+            return NULL_VAL;
+        }
+
+        printf("%s ", AS_CSTRING(prompt));
+    }
+
+    uint64_t currentSize = 128;
+    char *line = malloc(currentSize);
+
+    if (line == NULL) {
+        runtimeError("Memory error on input()");
+        return NULL_VAL;
+    }
+
+    int c = EOF;
+    uint64_t i = 0;
+
+    while ((c = getchar()) != '\n' && c != EOF) {
+        line[i++] = (char) c;
+
+        if (i + 1 == currentSize) {
+            currentSize = GROW_CAPACITY(currentSize);
+            line = realloc(line, currentSize);
+
+            if (line == NULL) {
+                printf("Unable to allocate memory.\n");
+                exit(71);
+            }
+        }
+    }
+
+    line[i] = '\0';
+
+    Value input = OBJ_VAL(copyString(line, strlen(line)));
+    free(line);
+    return input;
 }
 
 static Value printNative(int argCount, Value *args) {
@@ -31,7 +81,7 @@ static Value writeNative(int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        printf(" ");
+        printf("%s", " ");
         fflush(stdout);
         return NULL_VAL;
     }
@@ -39,8 +89,7 @@ static Value writeNative(int argCount, Value *args)
     for (int i = 0; i < argCount; i++)
     {
         Value value = args[i];
-
-        printValue(value);
+        printf("%s", AS_CSTRING(value));
         fflush(stdout);
     }
 
@@ -86,6 +135,7 @@ static Value assertNative(int argCount, Value *args)
 
 const char *nativeNames[] = {
     "clock",
+    "input",
     "print",
     "write",
     "error",
@@ -94,6 +144,7 @@ const char *nativeNames[] = {
 
 NativeFn nativeFunctions[] = {
     clockNative,
+    inputNative,
     printNative,
     writeNative,
     errorNative,
