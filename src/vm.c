@@ -11,6 +11,7 @@
 #include "memory.h"
 #include "modules/modules.h"
 #include "native.h"
+#include "utilities.h"
 #include "vm.h"
 #include "modules/math.h"
 
@@ -630,6 +631,25 @@ static InterpretResult run() {
             case OP_METHOD:
                 defineMethod(READ_STRING());
                 break;
+
+            case OP_INCLUDE: {
+                ObjString *fileName = AS_STRING(pop());
+                char *source = readFile(fileName->chars);
+
+                ObjFunction *function = compile(source);
+                if (function == NULL) return INTERPRET_COMPILE_ERROR;
+
+                push(OBJ_VAL(function));
+                ObjClosure *closure = newClosure(function);
+                pop();
+
+                frame = &vm.frames[vm.frameCount++];
+                frame->ip = closure->function->chunk.code;
+                frame->closure = closure;
+                frame->slots = vm.stackTop - 1;
+
+                break;
+            }
         }
     }
 

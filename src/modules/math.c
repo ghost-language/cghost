@@ -26,9 +26,14 @@ mathAbs(int argCount, Value *args)
         return NULL_VAL;
     }
 
-    Value number = args[0];
+    double value = AS_NUMBER(args[0]);
 
-    return NUMBER_VAL(abs((int)AS_NUMBER(number)));
+    if (value < 0)
+    {
+        return NUMBER_VAL(value * -1);
+    }
+
+    return NUMBER_VAL(value);
 }
 
 static Value
@@ -48,7 +53,7 @@ mathAcos(int argCount, Value *args)
 
     Value number = args[0];
 
-    return NUMBER_VAL(acos((int)AS_NUMBER(number)));
+    return NUMBER_VAL(acos((double)AS_NUMBER(number)));
 }
 
 static Value
@@ -160,16 +165,59 @@ mathMax(int argCount, Value *args)
         return NULL_VAL;
     }
 
-    double max = AS_NUMBER(args[0]);
-    double value = AS_NUMBER(args[0]);
+    double maximum = AS_NUMBER(args[0]);
 
-    for (int i = 1; argCount <= i; i++)
+    for (int i = 1; i < argCount; ++i)
     {
-        value = AS_NUMBER(args[i]);
-        max = (((value) > (max)) ? (value) : (max));
+        Value value = args[i];
+
+        if (!IS_NUMBER(value))
+        {
+            runtimeError("A non-number value passed to Math.max()");
+            return NULL_VAL;
+        }
+
+        double current = AS_NUMBER(value);
+
+        if (maximum < current)
+        {
+            maximum = current;
+        }
     }
 
-    return NUMBER_VAL(max);
+    return NUMBER_VAL(maximum);
+}
+
+static Value
+mathMin(int argCount, Value *args)
+{
+    if (argCount == 0)
+    {
+        runtimeError("Math.min() expects at least one argument.");
+        return NULL_VAL;
+    }
+
+    double minimum = AS_NUMBER(args[0]);
+
+    for (int i = 1; i < argCount; ++i)
+    {
+        Value value = args[i];
+
+        if (!IS_NUMBER(value))
+        {
+            runtimeError("A non-number value passed to Math.min()");
+            return NULL_VAL;
+        }
+
+        double current = AS_NUMBER(value);
+
+        if (minimum > current)
+        {
+            minimum = current;
+        }
+    }
+
+    return NUMBER_VAL(minimum);
 }
 
 static Value mathPi(int argCount, Value *args)
@@ -192,6 +240,7 @@ void registerMathModule()
     defineNativeMethod(klass, "cos", mathCos);
     defineNativeMethod(klass, "floor", mathFloor);
     defineNativeMethod(klass, "max", mathMax);
+    defineNativeMethod(klass, "min", mathMin);
     defineNativeMethod(klass, "pi", mathPi);
 
     tableSet(&vm.globals, name, OBJ_VAL(klass));

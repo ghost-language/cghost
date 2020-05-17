@@ -1,0 +1,17 @@
+assert(Math.abs(-100) == 100);
+assert(Math.abs(25.67) == 25.67);
+assert(Math.abs(0) == 0);
+
+assert(Math.ceil(0.5) == 1);
+assert(Math.ceil(-0.5) == 0);
+
+assert(Math.floor(0.5) == 0);
+assert(Math.floor(-0.5) == -1);
+
+assert(Math.max(1.2, -7, 3) == 3);
+assert(Math.max(1.2, 7, 3) == 7);
+assert(Math.max(-1.2, -7, -3) == -1.2);
+
+assert(Math.min(1.2, -7, 3) == -7);
+assert(Math.min(1.2, 7, 3) == 1.2);
+assert(Math.min(-1.2, -2, -3) == -3);

@@ -648,6 +648,7 @@ ParseRule rules[] = {
     {NULL, NULL, PREC_NONE},         // TOKEN_VAR
     {NULL, NULL, PREC_NONE},         // TOKEN_WHILE
     {NULL, NULL, PREC_NONE},         // TOKEN_EXTENDS
+    {NULL, NULL, PREC_NONE},         // TOKEN_INCLUDE
     {NULL, NULL, PREC_NONE},         // TOKEN_ERROR
     {NULL, NULL, PREC_NONE},         // TOKEN_EOF
 };
@@ -891,6 +892,14 @@ static void ifStatement() {
     patchJump(elseJump);
 }
 
+static void includeStatement() {
+    consume(TOKEN_STRING, "Expect a string after include");
+    emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
+    consume(TOKEN_SEMICOLON, "Expect ';' after include.");
+
+    emitByte(OP_INCLUDE);
+}
+
 static void returnStatement() {
     if (current->type == TYPE_SCRIPT) {
         error("Cannot return from top-level code.");
@@ -941,6 +950,7 @@ static void synchronize() {
             case TOKEN_IF:
             case TOKEN_WHILE:
             case TOKEN_EXTENDS:
+            case TOKEN_INCLUDE:
             case TOKEN_RETURN:
                 return;
 
@@ -974,6 +984,8 @@ static void statement() {
         ifStatement();
     } else if (match(TOKEN_RETURN)) {
         returnStatement();
+    } else if (match(TOKEN_INCLUDE)) {
+        includeStatement();
     } else if (match(TOKEN_WHILE)) {
         whileStatement();
     } else if (match(TOKEN_LEFT_BRACE)) {

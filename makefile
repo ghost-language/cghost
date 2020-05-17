@@ -1,8 +1,16 @@
-CC=clang
-CFLAGS=-I
+BUILD_DIR := build
 
-ghost: src/chunk.c src/compiler.c src/debug.c src/main.c src/memory.c src/native.c src/object.c src/scanner.c src/table.c src/value.c src/vm.c src/modules/modules.c src/modules/math.c src/vendor/linenoise.c
-	@ $(CC) -o ghost src/chunk.c src/compiler.c src/debug.c src/main.c src/memory.c src/native.c src/object.c src/scanner.c src/table.c src/value.c src/vm.c src/modules/modules.c src/modules/math.c src/vendor/linenoise.c
+debug:
+	@ $(MAKE) -f ghost.make NAME=ghost MODE=debug SOURCE_DIR=src
+	@ cp build/ghost ghost
 
 clean:
+	@ rm -rf $(BUILD_DIR)
+	@ rm -rf gen
 	@ rm ghost
+
+ghost:
+	@ $(MAKE) -f ghost.make NAME=ghost MODE=release SOURCE_DIR=src
+	@ cp build/ghost ghost
+
+.PHONY: clean ghost debug
