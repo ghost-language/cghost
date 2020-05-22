@@ -124,6 +124,7 @@ static void blackenObject(Obj* object) {
 
         case OBJ_NATIVE:
         case OBJ_STRING:
+        case OBJ_LIST:
             break;
     }
 }
@@ -188,6 +189,10 @@ static void freeObject(Obj* object) {
 
         case OBJ_UPVALUE: {
             FREE(ObjUpvalue, object);
+            break;
+        }
+
+        case OBJ_LIST: {
             break;
         }
     }

@@ -162,6 +162,10 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return constantInstruction("OP_METHOD", chunk, offset);
         case OP_INCLUDE:
             return simpleInstruction("OP_INCLUDE", offset);
+        case OP_NEW_LIST:
+            return simpleInstruction("OP_NEW_LIST", offset);
+        case OP_ADD_LIST:
+            return simpleInstruction("OP_ADD_LIST", offset);
         default:
             printf("Unknown opcode %d\n", instruction);
             return offset + 1;

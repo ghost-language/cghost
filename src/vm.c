@@ -655,6 +655,74 @@ static InterpretResult run() {
 
                 break;
             }
+
+            case OP_NEW_LIST: {
+                ObjList* list = newList();
+                push(OBJ_VAL(list));
+                break;
+            }
+
+            case OP_ADD_LIST: {
+                Value addValue = pop();
+                Value listValue = pop();
+
+                ObjList* list = AS_LIST(listValue);
+                writeValueArray(&list->values, addValue);
+
+                push(OBJ_VAL(list));
+                break;
+            }
+
+            case OP_SUBSCRIPT: {
+                Value indexValue = pop();
+                Value listValue = pop();
+
+                if (!IS_NUMBER(indexValue)) {
+                    runtimeError("List index must be a number.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+
+                ObjList *list = AS_LIST(listValue);
+                int index = AS_NUMBER(indexValue);
+
+                push(list->values.values[index]);
+                break;
+            }
+
+            case OP_SUBSCRIPT_ASSIGN: {
+                Value assignValue = peek(0);
+                Value indexValue = peek(1);
+                Value listValue = peek(2);
+
+                if (!IS_OBJ(listValue)) {
+                    runtimeError("Can only subscript lists.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+
+                if (!IS_NUMBER(indexValue)) {
+                    runtimeError("List index must be a number.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+
+                ObjList *list = AS_LIST(listValue);
+                int index = AS_NUMBER(indexValue);
+
+                if (index >= 0 && index < list->values.count) {
+                    list->values.values[index] = assignValue;
+                    push(NULL_VAL);
+                } else {
+                    pop();
+                    pop();
+                    pop();
+
+                    push(NULL_VAL);
+
+                    runtimeError("List index out of bounds.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+
+                break;
+            }
         }
     }
 

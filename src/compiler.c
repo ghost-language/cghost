@@ -464,6 +464,33 @@ static void call(bool canAssign) {
     emitBytes(OP_CALL, argCount);
 }
 
+static void list(bool canAssign) {
+    emitByte(OP_NEW_LIST);
+
+    do {
+        if (check(TOKEN_RIGHT_BRACKET)) {
+            break;
+        }
+
+        expression();
+        emitByte(OP_ADD_LIST);
+    } while (match(TOKEN_COMMA));
+
+    consume(TOKEN_RIGHT_BRACKET, "Expected closing ']'");
+}
+
+static void subscript(bool canAssign) {
+    expression();
+    consume(TOKEN_RIGHT_BRACKET, "Expected closing ']'");
+
+    if (match(TOKEN_EQUAL)) {
+        expression();
+        emitByte(OP_SUBSCRIPT_ASSIGN);
+    } else {
+        emitByte(OP_SUBSCRIPT);
+    }
+}
+
 static void dot(bool canAssign) {
     consume(TOKEN_IDENTIFIER, "Expect property name after '.'.");
     uint8_t name = identifierConstant(&parser.previous);
@@ -613,6 +640,8 @@ ParseRule rules[] = {
     {NULL, NULL, PREC_NONE},         // TOKEN_RIGHT_PAREN
     {NULL, NULL, PREC_NONE},         // TOKEN_LEFT_BRACE
     {NULL, NULL, PREC_NONE},         // TOKEN_RIGHT_BRACE
+    {list, subscript, PREC_CALL},    // TOKEN_LEFT_BRACKET
+    {NULL, NULL, PREC_NONE},         // TOKEN_RIGHT_BRACKET
     {NULL, NULL, PREC_NONE},         // TOKEN_COMMA
     {NULL, dot, PREC_CALL},          // TOKEN_DOT
     {unary, binary, PREC_TERM},      // TOKEN_MINUS

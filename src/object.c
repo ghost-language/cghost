@@ -86,6 +86,13 @@ ObjNative* newNative(NativeFn function) {
     return native;
 }
 
+ObjList* newList() {
+    ObjList* list = ALLOCATE_OBJ(ObjList, OBJ_LIST);
+    initValueArray(&list->values);
+
+    return list;
+}
+
 static ObjString* allocateString(char* chars, int length, uint32_t hash) {
     ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
     string->length = length;
@@ -187,6 +194,23 @@ void printObject(Value value) {
         case OBJ_STRING:
             printf("%s", AS_CSTRING(value));
             break;
+
+        case OBJ_LIST: {
+            ObjList* list = AS_LIST(value);
+            printf("[");
+
+            for (int i = 0; i < list->values.count; ++i) {
+                printValue(list->values.values[i]);
+
+                if (i != list->values.count - 1) {
+                    printf(", ");
+                }
+            }
+
+            printf("]");
+            break;
+        }
+
         case OBJ_UPVALUE:
             printf("upvalue");
             break;
