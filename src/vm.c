@@ -11,7 +11,8 @@
 #include "memory.h"
 #include "modules/modules.h"
 #include "native.h"
-#include "values/string.h"
+#include "datatypes/string.h"
+#include "datatypes/list.h"
 #include "utilities.h"
 #include "vm.h"
 #include "modules/math.h"
@@ -207,8 +208,8 @@ static bool invoke(ObjString* name, int argCount) {
             return callValue(function, argCount);
         }
 
-         case OBJ_INSTANCE: {
-             ObjInstance* instance = AS_INSTANCE(receiver);
+        case OBJ_INSTANCE: {
+            ObjInstance* instance = AS_INSTANCE(receiver);
 
             Value value;
 
@@ -219,11 +220,15 @@ static bool invoke(ObjString* name, int argCount) {
             }
 
             return invokeFromClass(instance->klass, name, argCount);
-         }
+        }
 
-         case OBJ_STRING: {
+        case OBJ_STRING: {
             return declareString(name->chars, argCount + 1);
-         }
+        }
+
+        case OBJ_LIST: {
+            return declareList(name->chars, argCount + 1);
+        }
 
          default: {
              runtimeError("Only instances have methods.");
