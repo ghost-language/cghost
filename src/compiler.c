@@ -674,7 +674,7 @@ ParseRule rules[] = {
     {super_, NULL, PREC_NONE},       // TOKEN_SUPER
     {this_, NULL, PREC_NONE},        // TOKEN_THIS
     {literal, NULL, PREC_NONE},      // TOKEN_TRUE
-    {NULL, NULL, PREC_NONE},         // TOKEN_VAR
+    {NULL, NULL, PREC_NONE},         // TOKEN_LET
     {NULL, NULL, PREC_NONE},         // TOKEN_WHILE
     {NULL, NULL, PREC_NONE},         // TOKEN_EXTENDS
     {NULL, NULL, PREC_NONE},         // TOKEN_INCLUDE
@@ -832,7 +832,7 @@ static void functionDeclaration() {
     defineVariable(global);
 }
 
-static void varDeclaration() {
+static void letDeclaration() {
     uint32_t global = parseVariable("Expect variable name.");
 
     if (match(TOKEN_EQUAL)) {
@@ -859,8 +859,8 @@ static void forStatement() {
 
     if (match(TOKEN_SEMICOLON)) {
         // No initializer
-    } else if (match(TOKEN_VAR)) {
-        varDeclaration();
+    } else if (match(TOKEN_LET)) {
+        letDeclaration();
     } else {
         expressionStatement();
     }
@@ -974,7 +974,7 @@ static void synchronize() {
         switch (parser.current.type) {
             case TOKEN_CLASS:
             case TOKEN_FUNCTION:
-            case TOKEN_VAR:
+            case TOKEN_LET:
             case TOKEN_FOR:
             case TOKEN_IF:
             case TOKEN_WHILE:
@@ -997,8 +997,8 @@ static void declaration() {
         classDeclaration();
     } else if (match(TOKEN_FUNCTION)) {
         functionDeclaration();
-    } else if (match(TOKEN_VAR)) {
-        varDeclaration();
+    } else if (match(TOKEN_LET)) {
+        letDeclaration();
     } else {
         statement();
     }

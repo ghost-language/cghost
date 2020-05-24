@@ -11,7 +11,7 @@ class Book
     }
 }
 
-var books = [
+let books = [
     Book("Shadow of a Dark Queen"),
     Book("Rise of a Merchant Prince"),
     Book("Rage of a Demon King"),
@@ -19,9 +19,9 @@ var books = [
 
 print(books[0].getTitle());
 
-var i;
-var j;
-var matrix = [
+let i;
+let j;
+let matrix = [
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 10, 11, 12],

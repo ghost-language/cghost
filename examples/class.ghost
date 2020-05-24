@@ -14,7 +14,7 @@ class Latte extends Coffee {
     }
 }
 
-var latte = Latte();
+let latte = Latte();
 latte.printName();
 
 class CoffeeMaker {
@@ -28,6 +28,6 @@ class CoffeeMaker {
     }
 }
 
-var maker = CoffeeMaker("latte");
+let maker = CoffeeMaker("latte");
 
 maker.brew();

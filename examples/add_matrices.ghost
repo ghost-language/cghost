@@ -1,0 +1,41 @@
+// In Ghost, we can implement a matrix as a nested list.
+// We can then treat each element as a row of the matrix.
+//
+// For example, `[[1, 2], [4, 5], [3, 6]]` would represent
+// a 3x2 matrix. The first row can be accessed as `x[0]`
+// and the element in the first column of the first row can
+// be accessed as `x[0][0]`.
+//
+// We can perform matrix addition in Ghost using a nested loop.
+
+let x = [
+    [12, 7, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+];
+
+let y = [
+    [5, 8, 1],
+    [6, 7, 3],
+    [4, 5, 9],
+];
+
+let result = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+];
+
+let i;
+let j;
+let k;
+
+for (i = 0; i < x.length(); i = i + 1) {
+    for (j = 0; j < x[0].length(); j = j + 1) {
+        result[i][j] = x[i][j] + y[i][j];
+    }
+}
+
+for (k = 0; k < result.length(); k = k + 1) {
+    print(result[k]);
+}

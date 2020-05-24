@@ -2,7 +2,7 @@ print("Hello and welcome to the user greeting program.");
 print("My name is Operator-00.");
 
 print();
-var name = input("Please enter your name:");
+let name = input("Please enter your name:");
 
 print();
 print("Nice to meet you, " + name);

@@ -1,4 +1,4 @@
-for (var i = 0; i < 20; i = i + 1) {
+for (let i = 0; i < 20; i = i + 1) {
     if (i % 3 == 0 and i % 5 == 0) {
         print("FizzBuzz");
     } else if (i % 3 == 0) {

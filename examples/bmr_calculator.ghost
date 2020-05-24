@@ -57,7 +57,7 @@ class BMRCalculator
 
     askAge()
     {
-        var age = input("What is your age?");
+        let age = input("What is your age?");
 
         print("Registered as " + age + ".");
 

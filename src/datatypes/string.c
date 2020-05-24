@@ -4,7 +4,7 @@
 #include "string.h"
 #include "../vm.h"
 
-bool static stringLower(int argCount)
+bool static stringLowerCase(int argCount)
 {
     ObjString *string = AS_STRING(pop());
 
@@ -32,7 +32,7 @@ bool static stringToNumber(int argCount)
     return true;
 }
 
-bool static stringUpper(int argCount)
+bool static stringUpperCase(int argCount)
 {
     ObjString *string = AS_STRING(pop());
 
@@ -59,12 +59,12 @@ bool static stringLength(int argCount)
 
 bool declareString(char *method, int argCount)
 {
-    if (strcmp(method, "upper") == 0) {
-        return stringUpper(argCount);
+    if (strcmp(method, "upperCase") == 0) {
+        return stringUpperCase(argCount);
     } else if (strcmp(method, "toNumber") == 0) {
         return stringToNumber(argCount);
-    } else if (strcmp(method, "lower") == 0) {
-        return stringLower(argCount);
+    } else if (strcmp(method, "lowerCase") == 0) {
+        return stringLowerCase(argCount);
     } else if (strcmp(method, "length") == 0) {
         return stringLength(argCount);
     }
