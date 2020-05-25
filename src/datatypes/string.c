@@ -1,12 +1,13 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "../include/ghost.h"
 #include "string.h"
 #include "../vm.h"
 
-bool static stringLowerCase(int argCount)
+bool static stringLowerCase(GhostVM *vm, int argCount)
 {
-    ObjString *string = AS_STRING(pop());
+    ObjString *string = AS_STRING(pop(vm));
 
     char *temp = malloc(sizeof(char) * (string->length + 1));
 
@@ -17,24 +18,24 @@ bool static stringLowerCase(int argCount)
 
     temp[string->length] = '\0';
 
-    push(OBJ_VAL(copyString(temp, string->length)));
+    push(vm, OBJ_VAL(copyString(vm, temp, string->length)));
     return true;
 }
 
-bool static stringToNumber(int argCount)
+bool static stringToNumber(GhostVM *vm, int argCount)
 {
-    char *numberString = AS_CSTRING(pop());
+    char *numberString = AS_CSTRING(pop(vm));
     char *end;
 
     double number = strtod(numberString, &end);
 
-    push(NUMBER_VAL(number));
+    push(vm, NUMBER_VAL(number));
     return true;
 }
 
-bool static stringUpperCase(int argCount)
+bool static stringUpperCase(GhostVM *vm, int argCount)
 {
-    ObjString *string = AS_STRING(pop());
+    ObjString *string = AS_STRING(pop(vm));
 
     char *temp = malloc(sizeof(char) * (string->length + 1));
 
@@ -45,30 +46,30 @@ bool static stringUpperCase(int argCount)
 
     temp[string->length] = '\0';
 
-    push(OBJ_VAL(copyString(temp, string->length)));
+    push(vm, OBJ_VAL(copyString(vm, temp, string->length)));
     return true;
 }
 
-bool static stringLength(int argCount)
+bool static stringLength(GhostVM *vm, int argCount)
 {
-    ObjString *string = AS_STRING(pop());
+    ObjString *string = AS_STRING(pop(vm));
 
-    push(NUMBER_VAL(string->length));
+    push(vm, NUMBER_VAL(string->length));
     return true;
 }
 
-bool declareString(char *method, int argCount)
+bool declareString(GhostVM *vm, char *method, int argCount)
 {
     if (strcmp(method, "upperCase") == 0) {
-        return stringUpperCase(argCount);
+        return stringUpperCase(vm, argCount);
     } else if (strcmp(method, "toNumber") == 0) {
-        return stringToNumber(argCount);
+        return stringToNumber(vm, argCount);
     } else if (strcmp(method, "lowerCase") == 0) {
-        return stringLowerCase(argCount);
+        return stringLowerCase(vm, argCount);
     } else if (strcmp(method, "length") == 0) {
-        return stringLength(argCount);
+        return stringLength(vm, argCount);
     }
 
-    runtimeError("String has no method %s()", method);
+    runtimeError(vm, "String has no method %s()", method);
     return false;
 }

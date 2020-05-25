@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/ghost.h"
 #include "math.h"
 #include "../vm.h"
 
@@ -12,17 +13,17 @@
 #define AS_RAD(value)    ((value)*PI / 180.0)
 
 static Value
-mathAbs(int argCount, Value *args)
+mathAbs(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.abs() expects exactly one argument.");
+        runtimeError(vm, "Math.abs() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.abs() expects a number argument.");
+        runtimeError(vm, "Math.abs() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -37,17 +38,17 @@ mathAbs(int argCount, Value *args)
 }
 
 static Value
-mathAcos(int argCount, Value *args)
+mathAcos(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.acos() expects exactly one argument.");
+        runtimeError(vm, "Math.acos() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.abs() expects a number argument.");
+        runtimeError(vm, "Math.abs() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -57,17 +58,17 @@ mathAcos(int argCount, Value *args)
 }
 
 static Value
-mathAsin(int argCount, Value *args)
+mathAsin(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.asin() expects exactly one argument.");
+        runtimeError(vm, "Math.asin() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.asin() expects a number argument.");
+        runtimeError(vm, "Math.asin() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -77,17 +78,17 @@ mathAsin(int argCount, Value *args)
 }
 
 static Value
-mathAtan(int argCount, Value *args)
+mathAtan(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.atan() expects exactly one argument.");
+        runtimeError(vm, "Math.atan() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.atan() expects a number argument.");
+        runtimeError(vm, "Math.atan() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -97,17 +98,17 @@ mathAtan(int argCount, Value *args)
 }
 
 static Value
-mathCeil(int argCount, Value *args)
+mathCeil(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.ceil() expects exactly one argument.");
+        runtimeError(vm, "Math.ceil() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.ceil() expects a number argument.");
+        runtimeError(vm, "Math.ceil() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -117,17 +118,17 @@ mathCeil(int argCount, Value *args)
 }
 
 static Value
-mathCos(int argCount, Value *args)
+mathCos(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.cos() expects exactly one argument.");
+        runtimeError(vm, "Math.cos() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.cos() expects a number argument.");
+        runtimeError(vm, "Math.cos() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -137,17 +138,17 @@ mathCos(int argCount, Value *args)
 }
 
 static Value
-mathFloor(int argCount, Value *args)
+mathFloor(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.floor() expects exactly one argument.");
+        runtimeError(vm, "Math.floor() expects exactly one argument.");
         return NULL_VAL;
     }
 
     if (!IS_NUMBER(args[0]))
     {
-        runtimeError("Math.floor() expects a number argument.");
+        runtimeError(vm, "Math.floor() expects a number argument.");
         return NULL_VAL;
     }
 
@@ -157,11 +158,11 @@ mathFloor(int argCount, Value *args)
 }
 
 static Value
-mathMax(int argCount, Value *args)
+mathMax(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.max() expects at least one argument.");
+        runtimeError(vm, "Math.max() expects at least one argument.");
         return NULL_VAL;
     }
 
@@ -173,7 +174,7 @@ mathMax(int argCount, Value *args)
 
         if (!IS_NUMBER(value))
         {
-            runtimeError("A non-number value passed to Math.max()");
+            runtimeError(vm, "A non-number value passed to Math.max()");
             return NULL_VAL;
         }
 
@@ -189,11 +190,11 @@ mathMax(int argCount, Value *args)
 }
 
 static Value
-mathMin(int argCount, Value *args)
+mathMin(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("Math.min() expects at least one argument.");
+        runtimeError(vm, "Math.min() expects at least one argument.");
         return NULL_VAL;
     }
 
@@ -205,7 +206,7 @@ mathMin(int argCount, Value *args)
 
         if (!IS_NUMBER(value))
         {
-            runtimeError("A non-number value passed to Math.min()");
+            runtimeError(vm, "A non-number value passed to Math.min()");
             return NULL_VAL;
         }
 
@@ -220,30 +221,30 @@ mathMin(int argCount, Value *args)
     return NUMBER_VAL(minimum);
 }
 
-static Value mathPi(int argCount, Value *args)
+static Value mathPi(GhostVM *vm, int argCount, Value *args)
 {
     return NUMBER_VAL(PI);
 }
 
-void registerMathModule()
+void registerMathModule(GhostVM *vm)
 {
-    ObjString *name = copyString("Math", 4);
-    push(OBJ_VAL(name));
-    ObjNativeClass *klass = newNativeClass(name);
-    push(OBJ_VAL(klass));
+    ObjString *name = copyString(vm, "Math", 4);
+    push(vm, OBJ_VAL(name));
+    ObjNativeClass *klass = newNativeClass(vm, name);
+    push(vm, OBJ_VAL(klass));
 
-    defineNativeMethod(klass, "abs", mathAbs);
-    defineNativeMethod(klass, "acos", mathAcos);
-    defineNativeMethod(klass, "asin", mathAsin);
-    defineNativeMethod(klass, "atan", mathAtan);
-    defineNativeMethod(klass, "ceil", mathCeil);
-    defineNativeMethod(klass, "cos", mathCos);
-    defineNativeMethod(klass, "floor", mathFloor);
-    defineNativeMethod(klass, "max", mathMax);
-    defineNativeMethod(klass, "min", mathMin);
-    defineNativeMethod(klass, "pi", mathPi);
+    defineNativeMethod(vm, klass, "abs", mathAbs);
+    defineNativeMethod(vm, klass, "acos", mathAcos);
+    defineNativeMethod(vm, klass, "asin", mathAsin);
+    defineNativeMethod(vm, klass, "atan", mathAtan);
+    defineNativeMethod(vm, klass, "ceil", mathCeil);
+    defineNativeMethod(vm, klass, "cos", mathCos);
+    defineNativeMethod(vm, klass, "floor", mathFloor);
+    defineNativeMethod(vm, klass, "max", mathMax);
+    defineNativeMethod(vm, klass, "min", mathMin);
+    defineNativeMethod(vm, klass, "pi", mathPi);
 
-    tableSet(&vm.globals, name, OBJ_VAL(klass));
-    pop();
-    pop();
+    tableSet(vm, &vm->globals, name, OBJ_VAL(klass));
+    pop(vm);
+    pop(vm);
 }

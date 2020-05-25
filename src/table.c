@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "include/ghost.h"
 #include "memory.h"
 #include "object.h"
 #include "table.h"
@@ -14,8 +15,8 @@ void initTable(Table* table) {
     table->entries = NULL;
 }
 
-void freeTable(Table* table) {
-    FREE_ARRAY(Entry, table->entries, table->capacity + 1);
+void freeTable(GhostVM *vm, Table* table) {
+    FREE_ARRAY(vm, Entry, table->entries, table->capacity + 1);
     initTable(table);
 }
 
@@ -51,8 +52,8 @@ bool tableGet(Table* table, ObjString* key, Value* value) {
     return value;
 }
 
-static void adjustCapacity(Table* table, int capacity) {
-    Entry* entries = ALLOCATE(Entry, capacity + 1);
+static void adjustCapacity(GhostVM *vm, Table* table, int capacity) {
+    Entry* entries = ALLOCATE(vm, Entry, capacity + 1);
 
     for (int i = 0; i <= capacity; i++) {
         entries[i].key = NULL;
@@ -71,16 +72,16 @@ static void adjustCapacity(Table* table, int capacity) {
         table->count++;
     }
 
-    FREE_ARRAY(Entry, table->entries, table->capacity + 1);
+    FREE_ARRAY(vm, Entry, table->entries, table->capacity + 1);
 
     table->entries = entries;
     table->capacity = capacity;
 }
 
-bool tableSet(Table* table, ObjString* key, Value value) {
+bool tableSet(GhostVM *vm, Table* table, ObjString* key, Value value) {
     if (table->count + 1 > (table->capacity + 1) * TABLE_MAX_LOAD) {
         int capacity = GROW_CAPACITY(table->capacity + 1) - 1;
-        adjustCapacity(table, capacity);
+        adjustCapacity(vm, table, capacity);
     }
 
     Entry* entry = findEntry(table->entries, table->capacity, key);
@@ -108,12 +109,12 @@ bool tableDelete(Table* table, ObjString* key) {
     return true;
 }
 
-void tableAddAll(Table* from, Table* to) {
+void tableAddAll(GhostVM *vm, Table* from, Table* to) {
     for (int i = 0; i <= from->capacity; i++) {
         Entry* entry = &from->entries[i];
 
         if (entry->key != NULL) {
-            tableSet(to, entry->key, entry->value);
+            tableSet(vm, to, entry->key, entry->value);
         }
     }
 }
@@ -148,10 +149,10 @@ void tableRemoveWhite(Table* table) {
     }
 }
 
-void markTable(Table* table) {
+void markTable(GhostVM *vm, Table* table) {
     for (int i = 0; i <= table->capacity; i++) {
         Entry* entry = &table->entries[i];
-        markObject((Obj*)entry->key);
-        markValue(entry->value);
+        markObject(vm, (Obj*)entry->key);
+        markValue(vm, entry->value);
     }
 }

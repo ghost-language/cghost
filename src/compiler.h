@@ -17,10 +17,11 @@
 // Compilation is also faster since we don't create a bunch of temporary data
 // structures and destroy them after generating code.
 
+#include "include/ghost.h"
 #include "object.h"
 #include "vm.h"
 
-ObjFunction* compile(const char* source);
+ObjFunction* ghostCompile(GhostVM *vm, const char* source);
 void markCompilerRoots();
 
 #endif

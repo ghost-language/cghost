@@ -9,10 +9,12 @@
 // runs the chunk and then responds with an interpresation result, indicating
 // if the code was successful or encountered any compile or runtime errors.
 
+#include "chunk.h"
 #include "object.h"
 #include "table.h"
-#include "chunk.h"
 #include "value.h"
+
+#include "include/ghost.h"
 
 #define FRAMES_MAX 64
 #define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
@@ -23,7 +25,7 @@ typedef struct {
     Value* slots;
 } CallFrame;
 
-typedef struct {
+struct GhostVM {
     CallFrame frames[FRAMES_MAX];
     int frameCount;
 
@@ -42,25 +44,14 @@ typedef struct {
     int grayCount;
     int grayCapacity;
     Obj** grayStack;
-} VM;
+};
 
-typedef enum {
-    INTERPRET_OK,
-    INTERPRET_COMPILE_ERROR,
-    INTERPRET_RUNTIME_ERROR
-} InterpretResult;
+void push(GhostVM *vm, Value value);
+Value pop(GhostVM *vm);
 
-extern VM vm;
+void defineNative(GhostVM *vm, const char *name, NativeFn function);
 
-void initVM();
-void freeVM();
-InterpretResult interpret(const char* source);
-void push(Value value);
-Value pop();
-
-void defineNative(const char *name, NativeFn function);
-
-void runtimeError(const char *format, ...);
+void runtimeError(GhostVM *vm, const char *format, ...);
 bool isFalsey(Value value);
 
 #endif

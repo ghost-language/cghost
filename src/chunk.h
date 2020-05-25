@@ -1,6 +1,7 @@
 #ifndef ghost_chunk_h
 #define ghost_chunk_h
 
+#include "include/ghost.h"
 #include "common.h"
 #include "value.h"
 
@@ -58,8 +59,8 @@ typedef struct {
 } Chunk;
 
 void initChunk(Chunk* chunk);
-void freeChunk(Chunk* chunk);
-void writeChunk(Chunk* chunk, uint8_t byte, int line);
-int addConstant(Chunk* chunk, Value value);
+void freeChunk(GhostVM *vm, Chunk* chunk);
+void writeChunk(GhostVM *vm, Chunk* chunk, uint8_t byte, int line);
+int addConstant(GhostVM *vm, Chunk* chunk, Value value);
 
 #endif

@@ -4,18 +4,19 @@
 #include <string.h>
 #include <time.h>
 
+#include "include/ghost.h"
 #include "memory.h"
 #include "native.h"
 #include "object.h"
 #include "vm.h"
 
-static Value clockNative(int argCount, Value* args) {
+static Value clockNative(GhostVM *vm, int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
-static Value inputNative(int argCount, Value *args) {
+static Value inputNative(GhostVM *vm, int argCount, Value *args) {
     if (argCount > 1) {
-        runtimeError("input() takes either 0 or 1 argument (%d given)", argCount);
+        runtimeError(vm, "input() takes either 0 or 1 argument (%d given)", argCount);
         return NULL_VAL;
     }
 
@@ -23,7 +24,7 @@ static Value inputNative(int argCount, Value *args) {
         Value prompt = args[0];
 
         if (!IS_STRING(prompt)) {
-            runtimeError("input() only takes a string argument");
+            runtimeError(vm, "input() only takes a string argument");
             return NULL_VAL;
         }
 
@@ -34,7 +35,7 @@ static Value inputNative(int argCount, Value *args) {
     char *line = malloc(currentSize);
 
     if (line == NULL) {
-        runtimeError("Memory error on input()");
+        runtimeError(vm, "Memory error on input()");
         return NULL_VAL;
     }
 
@@ -57,12 +58,12 @@ static Value inputNative(int argCount, Value *args) {
 
     line[i] = '\0';
 
-    Value input = OBJ_VAL(copyString(line, strlen(line)));
+    Value input = OBJ_VAL(copyString(vm, line, strlen(line)));
     free(line);
     return input;
 }
 
-static Value printNative(int argCount, Value *args) {
+static Value printNative(GhostVM *vm, int argCount, Value *args) {
     if (argCount == 0) {
         printf("\n");
         return NULL_VAL;
@@ -77,7 +78,7 @@ static Value printNative(int argCount, Value *args) {
     return NULL_VAL;
 }
 
-static Value writeNative(int argCount, Value *args)
+static Value writeNative(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
@@ -96,24 +97,24 @@ static Value writeNative(int argCount, Value *args)
     return NULL_VAL;
 }
 
-static Value errorNative(int argCount, Value *args)
+static Value errorNative(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
         return NULL_VAL;
     }
 
-    runtimeError(AS_CSTRING(args[0]));
+    runtimeError(vm, AS_CSTRING(args[0]));
     exit(70);
 
     return NULL_VAL;
 }
 
-static Value assertNative(int argCount, Value *args)
+static Value assertNative(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError("assert() takes 1 argument (%d given)", argCount);
+        runtimeError(vm, "assert() takes 1 argument (%d given)", argCount);
         exit(70);
     }
 
@@ -122,9 +123,9 @@ static Value assertNative(int argCount, Value *args)
         if (argCount == 2) {
             char message[1024];
             sprintf(message, "Failed asserting that %s", AS_CSTRING(args[1]));
-            runtimeError(message);
+            runtimeError(vm, message);
         } else {
-            runtimeError("assert() was false.");
+            runtimeError(vm, "assert() was false.");
         }
 
         exit(70);
@@ -151,8 +152,8 @@ NativeFn nativeFunctions[] = {
     assertNative,
 };
 
-void defineAllNatives() {
+void defineAllNatives(GhostVM *vm) {
     for (uint8_t i = 0; i < sizeof(nativeNames) / sizeof(nativeNames[0]); i++) {
-        defineNative(nativeNames[i], nativeFunctions[i]);
+        defineNative(vm, nativeNames[i], nativeFunctions[i]);
     }
 }

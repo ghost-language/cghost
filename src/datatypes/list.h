@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-bool declareList(char *method, int argCount);
+#include "../include/ghost.h"
+
+bool declareList(GhostVM *vm, char *method, int argCount);
 
 #endif

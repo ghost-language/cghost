@@ -1,6 +1,7 @@
 #ifndef ghost_object_h
 #define ghost_object_h
 
+#include "include/ghost.h"
 #include "common.h"
 #include "chunk.h"
 #include "table.h"
@@ -56,7 +57,7 @@ typedef struct {
     ObjString* name;
 } ObjFunction;
 
-typedef Value (*NativeFn)(int argCount, Value* args);
+typedef Value (*NativeFn)(GhostVM *vm, int argCount, Value* args);
 
 typedef struct {
   Obj obj;
@@ -113,17 +114,17 @@ typedef struct {
     ObjClosure* method;
 } ObjBoundMethod;
 
-ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method);
-ObjClass* newClass(ObjString* name);
-ObjNativeClass* newNativeClass(ObjString *name);
-ObjClosure* newClosure(ObjFunction* function);
-ObjFunction* newFunction();
-ObjInstance* newInstance(ObjClass* klass);
-ObjNative* newNative(NativeFn function);
-ObjString* takeString(char* chars, int length);
-ObjString* copyString(const char* chars, int length);
-ObjList* newList();
-ObjUpvalue* newUpvalue(Value* slot);
+ObjBoundMethod *newBoundMethod(GhostVM *vm, Value receiver, ObjClosure *method);
+ObjClass *newClass(GhostVM *vm, ObjString *name);
+ObjNativeClass *newNativeClass(GhostVM *vm, ObjString *name);
+ObjClosure *newClosure(GhostVM *vm, ObjFunction *function);
+ObjFunction *newFunction(GhostVM *vm);
+ObjInstance *newInstance(GhostVM *vm, ObjClass *klass);
+ObjNative *newNative(GhostVM *vm, NativeFn function);
+ObjString *takeString(GhostVM *vm, char *chars, int length);
+ObjString *copyString(GhostVM *vm, const char *chars, int length);
+ObjList *newList(GhostVM *vm);
+ObjUpvalue *newUpvalue(GhostVM *vm, Value *slot);
 void printObject(Value value);
 
 static inline bool isObjType(Value value, ObjType type) {
