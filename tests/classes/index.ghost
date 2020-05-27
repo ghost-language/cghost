@@ -1,0 +1,2 @@
+include "tests/classes/inheritance.ghost";
+include "tests/classes/methodCall.ghost";

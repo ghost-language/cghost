@@ -1,0 +1,4 @@
+Assert.isTrue(true or true);
+Assert.isTrue(false or true);
+Assert.isTrue(true or false);
+Assert.isFalse(false or false);

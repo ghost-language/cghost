@@ -85,6 +85,7 @@ GhostVM *ghostNewVM(GhostReallocateFn reallocateFn) {
     vm->constructorString = copyString(vm, "constructor", 11);
 
     defineAllNatives(vm);
+    registerAssertModule(vm);
     registerMathModule(vm);
 
     return vm;

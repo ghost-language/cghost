@@ -1,0 +1,17 @@
+Assert.equals(Math.abs(-100), 100);
+Assert.equals(Math.abs(25.67), 25.67);
+Assert.equals(Math.abs(0), 0);
+
+Assert.equals(Math.ceil(0.5), 1);
+Assert.equals(Math.ceil(-0.5), 0);
+
+Assert.equals(Math.floor(0.5), 0);
+Assert.equals(Math.floor(-0.5), -1);
+
+Assert.equals(Math.max(1.2, -7, 3), 3);
+Assert.equals(Math.max(1.2, 7, 3), 7);
+Assert.equals(Math.max(-1.2, -7, -3), -1.2);
+
+Assert.equals(Math.min(1.2, -7, 3), -7);
+Assert.equals(Math.min(1.2, 7, 3), 1.2);
+Assert.equals(Math.min(-1.2, -2, -3), -3);

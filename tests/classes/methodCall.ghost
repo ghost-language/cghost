@@ -1,0 +1,9 @@
+class Test
+{
+    getNumber()
+    {
+        return 10;
+    }
+}
+
+Assert.equals(Test().getNumber(), 10);

@@ -1,0 +1,24 @@
+print("Hello and welcome to the guessing game program.");
+print("My name is Operator-02.");
+print();
+print("In this game, you are tasked with guessing a number");
+print("that I have chosen between 1 and 99. If you guess");
+print("correctly, you win. If not, I will give you a hint");
+print("depending on if your guess was too low or high.");
+
+let guess = 58;
+let userGuess = 0;
+
+while (userGuess != guess) {
+    print();
+    userGuess = input("Input your guess:").toNumber();
+
+    if (userGuess < guess) {
+        print("Your guess was too low. Try again.");
+    } else if (userGuess > guess) {
+        print("Your guess was too high. Try again.");
+    }
+}
+
+print("Great job! You've guessed correctly.");
+print("Program exiting...");

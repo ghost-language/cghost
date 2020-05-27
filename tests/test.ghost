@@ -1,3 +1,7 @@
-include "tests/math.ghost";
+include "tests/classes/index.ghost";
+include "tests/maths/index.ghost";
+include "tests/operators/index.ghost";
+include "tests/primitives/index.ghost";
+include "tests/variables/index.ghost";
 
 print("All tests passed!");

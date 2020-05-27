@@ -110,28 +110,128 @@ static Value errorNative(GhostVM *vm, int argCount, Value *args)
     return NULL_VAL;
 }
 
-static Value assertNative(GhostVM *vm, int argCount, Value *args)
+static Value typeNative(GhostVM *vm, int argCount, Value *args)
 {
     if (argCount == 0)
     {
-        runtimeError(vm, "assert() takes 1 argument (%d given)", argCount);
-        exit(70);
+        runtimeError(vm, "type() takes 1 argument (%d given).", argCount);
+        return NULL_VAL;
     }
 
-    if (isFalsey(args[0]))
-    {
-        if (argCount == 2) {
-            char message[1024];
-            sprintf(message, "Failed asserting that %s", AS_CSTRING(args[1]));
-            runtimeError(vm, message);
-        } else {
-            runtimeError(vm, "assert() was false.");
+    if (IS_BOOL(args[0])) {
+        return OBJ_VAL(copyString(vm, "bool", 4));
+    } else if (IS_NULL(args[0])) {
+        return OBJ_VAL(copyString(vm, "null", 4));
+    } else if (IS_NUMBER(args[0])) {
+        return OBJ_VAL(copyString(vm, "number", 6));
+    } else if (IS_OBJ(args[0])) {
+        switch (OBJ_TYPE(args[0])) {
+            case OBJ_CLASS:
+                return OBJ_VAL(copyString(vm, "class", 5));
+            case OBJ_CLOSURE:
+                return OBJ_VAL(copyString(vm, "closure", 7));
+            case OBJ_FUNCTION:
+                return OBJ_VAL(copyString(vm, "function", 8));
+            case OBJ_STRING:
+                return OBJ_VAL(copyString(vm, "string", 6));
+            case OBJ_LIST:
+                return OBJ_VAL(copyString(vm, "list", 4));
+            case OBJ_NATIVE:
+                return OBJ_VAL(copyString(vm, "native", 6));
+            default:
+                break;
         }
-
-        exit(70);
     }
 
-    return NULL_VAL;
+    return OBJ_VAL(copyString(vm, "Unknown Type", 12));
+}
+
+/**
+ * Finds whether a value is a bool.
+ */
+static Value isBoolNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_BOOL(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
+}
+
+/**
+ * Finds whether a value is null.
+ */
+static Value isNullNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_NULL(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
+}
+
+/**
+ * Finds whether a value is a number.
+ */
+static Value isNumberNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_NUMBER(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
+}
+
+/**
+ * Finds whether a value is an object.
+ */
+static Value isObjectNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_OBJ(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
+}
+
+/**
+ * Finds whether a value is a string.
+ */
+static Value isStringNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_OBJ(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    if (OBJ_TYPE(args[0]) != OBJ_STRING)
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
+}
+
+/**
+ * Finds whether a value is a list.
+ */
+static Value isListNative(GhostVM *vm, int argCount, Value *args)
+{
+    if (argCount == 0 || !IS_OBJ(args[0]))
+    {
+        return FALSE_VAL;
+    }
+
+    if (OBJ_TYPE(args[0]) != OBJ_LIST)
+    {
+        return FALSE_VAL;
+    }
+
+    return TRUE_VAL;
 }
 
 const char *nativeNames[] = {
@@ -140,7 +240,13 @@ const char *nativeNames[] = {
     "print",
     "write",
     "error",
-    "assert",
+    "type",
+    "isBool",
+    "isNull",
+    "isNumber",
+    "isObject",
+    "isString",
+    "isList",
 };
 
 NativeFn nativeFunctions[] = {
@@ -149,7 +255,13 @@ NativeFn nativeFunctions[] = {
     printNative,
     writeNative,
     errorNative,
-    assertNative,
+    typeNative,
+    isBoolNative,
+    isNullNative,
+    isNumberNative,
+    isObjectNative,
+    isStringNative,
+    isListNative,
 };
 
 void defineAllNatives(GhostVM *vm) {

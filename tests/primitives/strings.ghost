@@ -1,0 +1,11 @@
+{
+    let message = "Hello World";
+
+    Assert.equals(message.lowerCase(), "hello world");
+}
+
+{
+    let message = "Hello World";
+
+    Assert.equals(message.upperCase(), "HELLO WORLD");
+}

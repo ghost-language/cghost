@@ -1,0 +1,6 @@
+let x = 10;
+
+Assert.equals(x - 1, 9);
+Assert.equals(x - x, 0);
+Assert.equals(1 - x, -9);
+assert.equals(10 - x - 10, -10); // Broken

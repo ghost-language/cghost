@@ -1,0 +1,5 @@
+// include "tests/operators/addition.ghost"; Broken!
+include "tests/operators/and.ghost";
+include "tests/operators/division.ghost";
+// include "tests/operators/or.ghost"; Broken!
+// include "tests/operators/subtraction.ghost"; Broken!

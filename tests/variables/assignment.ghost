@@ -1,0 +1,18 @@
+{
+    let x = 10;
+    Assert.equals(x, 10);
+}
+
+{
+    let test =
+    123;
+
+    Assert.equals(test, 123);
+}
+
+{
+    let x = 100;
+    x = 200;
+
+    Assert.equals(x, 200);
+}

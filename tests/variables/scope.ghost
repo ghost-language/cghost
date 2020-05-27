@@ -1,0 +1,39 @@
+{
+    let x = 10;
+
+    {
+        let x = 15;
+    }
+
+    Assert.equals(x, 10);
+}
+
+{
+    {
+        let y = 11;
+        Assert.equals(y, 11);
+    }
+
+    {
+        let y = 12;
+        Assert.equals(y, 12);
+    }
+}
+
+{
+    let x = 10;
+
+    {
+        Assert.equals(x, 10);
+    }
+}
+
+{
+    let x = 10;
+
+    if (true) {
+        let x = 11;
+    }
+
+    Assert.equals(x, 10);
+}

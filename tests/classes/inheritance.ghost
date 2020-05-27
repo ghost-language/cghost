@@ -1,0 +1,27 @@
+class Base
+{
+    constructor()
+    {
+        this.x = 100;
+    }
+
+    baseFunction()
+    {
+        return 10;
+    }
+}
+
+class Test extends Base {}
+
+class Testing extends Base
+{
+    constructor()
+    {
+        this.value = super.baseFunction();
+        this.testingFunction = super.baseFunction;
+    }
+}
+
+Assert.equals(Test().baseFunction(), 10);
+Assert.equals(Testing().value, 10);
+Assert.equals(Testing().testingFunction(), 10);

@@ -1,0 +1,6 @@
+let x = 10;
+
+Assert.equals(x + 1, 11);
+Assert.equals(x + x, 20);
+Assert.equals(1 + x, 11);
+assert.equals(10 + x + 10, 30); // Broken
